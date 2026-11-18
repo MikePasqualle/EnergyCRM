@@ -75,7 +75,7 @@ export async function dashboard(f: Filters, per: Period) {
     GROUP BY sup.name ORDER BY kwh DESC`
   const named = sup.filter((r) => r.name)
   const topSup = named[0] ?? null
-  const supTotal = sup.reduce((a, r) => a + r.kwh, 0)
+  const supTotal = named.reduce((a, r) => a + r.kwh, 0) // частки рахуємо серед обсягу з заданим постачальником
 
   const recent = await db.$queryRaw<{ client: string; purpose: string; product: string; amount: number }[]>`
     SELECT c.name client, p.purpose, pr.name product, p.amount::float8 amount FROM "Payment" p

@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
-import { useActionState, useEffect, useState } from 'react'
+import { useActionState, useEffect, useState, useTransition } from 'react'
+import { noReset } from '@/lib/noReset'
 import { createClient, mergeClient, updateClient, type ClientState } from '@/app/actions/clients'
 import { Field } from './ui'
 
@@ -36,6 +37,7 @@ export function ClientForm({ mode, clientId, init, managers, canPickManager, sou
   const [st, act, pending] = useActionState<ClientState, FormData>(action, undefined)
   const [mst, mact] = useActionState<ClientState, FormData>(mergeClient.bind(null, st?.dups?.[0]?.id ?? 0), undefined)
   const [again, setAgain] = useState(false)
+  const [, startT] = useTransition()
   const f = { ...(st?.fields ?? {}), ...(mst?.fields ?? {}) }
   const dups = st?.dups
   const nameLbl = type === 'COMPANY' ? 'Назва компанії *' : type === 'FOP' ? 'Назва ФОП або ПІБ *' : 'ПІБ *'
@@ -54,14 +56,14 @@ export function ClientForm({ mode, clientId, init, managers, canPickManager, sou
   useEffect(() => { if (mode === 'edit' && st?.created) window.location.assign(closeHref) }, [st, mode, closeHref])
 
   return (
-    <form action={act} id="client-form">
+    <form id="client-form" onSubmit={(e) => { const sub = (e.nativeEvent as SubmitEvent).submitter as HTMLElement | null; noReset((fd) => (sub?.dataset.merge ? mact(fd) : act(fd)), startT)(e) }}>
       {st?.error && !dups && !Object.keys(f).length && <div className="alert bad" role="alert" style={{ marginBottom: 16 }}>{st.error}</div>}
       {st?.created && st.again && <div className="alert ok" role="status" style={{ marginBottom: 16 }}>Клієнта збережено. Можна додати наступного.</div>}
       {dups && dups.length > 0 && (
         <div style={{ background: '#fff6dc', border: '1px solid #f1dc94', borderRadius: 14, padding: '12px 16px', marginBottom: 20 }} className="row s13" role="alert">
           <div style={{ flex: 1 }}><b>Знайдено схожого клієнта за {dups[0].by}:</b> {dups[0].name} · {dups[0].phone}{dups[0].email ? ` · ${dups[0].email}` : ''} <span className="muted">(менеджер: {dups[0].manager})</span></div>
           {dups[0].accessible ? <Link href={`/clients/${dups[0].id}`} className="b" style={{ color: '#1a479a' }}>Відкрити</Link> : <span className="muted">закріплений за іншим менеджером</span>}
-          {mode === 'create' && dups[0].accessible && <button formAction={mact} className="b" style={{ color: '#1a479a', background: 'none', border: 0, cursor: 'pointer', font: 'inherit' }}>Обʼєднати</button>}
+          {mode === 'create' && dups[0].accessible && <button data-merge="1" className="b" style={{ color: '#1a479a', background: 'none', border: 0, cursor: 'pointer', font: 'inherit' }}>Обʼєднати</button>}
           <button name="force" value="1" className="b" style={{ color: '#586072', background: 'none', border: 0, cursor: 'pointer', font: 'inherit' }}>Зберегти все одно</button>
         </div>
       )}

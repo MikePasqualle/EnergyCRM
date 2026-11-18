@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
-import { useActionState, useEffect, useState } from 'react'
+import { useActionState, useEffect, useState, useTransition } from 'react'
+import { noReset } from '@/lib/noReset'
 import { useRouter } from 'next/navigation'
 import { createDeal } from '@/app/actions/deals'
 import { ClientPicker } from './ClientPicker'
@@ -16,12 +17,13 @@ export function NewDealForm({ funnels, products, defaultFunnel, stageId, client,
   const [vol, setVol] = useState('')
   const [amount, setAmount] = useState('')
   const [manual, setManual] = useState(false)
+  const [, startT] = useTransition()
   const price = products.find((p) => p.id === prod)?.price ?? 0
   useEffect(() => { if (st?.created) r.push(`/deals/${st.created}`) }, [st, r])
   useEffect(() => { if (!manual) { const v = Number(vol.replace(',', '.')); setAmount(v > 0 ? String(Math.round((v * price) / 12)) : '') } }, [vol, price, manual])
   const f = st?.fields ?? {}
   return (
-    <form action={action} className="g" style={{ gap: 14 }}>
+    <form onSubmit={noReset(action, startT)} className="g" style={{ gap: 14 }}>
       {st?.error && !Object.keys(f).length && <div className="alert bad" role="alert">{st.error}</div>}
       {stageId && <input type="hidden" name="stageId" value={stageId} />}
       <Field label="Клієнт *" htmlFor="clientId-q" error={f.clientId}>

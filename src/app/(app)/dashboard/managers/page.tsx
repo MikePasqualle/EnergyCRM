@@ -19,7 +19,7 @@ export default async function ManagersPage({ searchParams }: { searchParams: Pro
   const sp = await searchParams
   const per = parsePeriod(one(sp.p), one(sp.from), one(sp.to))
   const funnels = await db.funnel.findMany({ where: { status: 'ACTIVE' }, orderBy: { position: 'asc' } })
-  const funnelId = Number(one(sp.f)) || null
+  const funnelId = one(sp.f) === 'all' ? null : Number(one(sp.f)) || funnels[0]?.id || null
   const { rows, daily } = await managersReport(funnelId, per)
   const base = (patch: Record<string, string | null>) => qs(sp, patch, '/dashboard/managers')
 
@@ -42,7 +42,7 @@ export default async function ManagersPage({ searchParams }: { searchParams: Pro
     return { label: `${from.getUTCDate()}–${to.getUTCDate()} ${monShort(to.getUTCMonth())}`, calls, mails, meets, total: calls + mails + meets }
   })
   const maxB = Math.max(1, ...buckets.map((b) => b.total))
-  const exportHref = qs(sp, {}, '/dashboard/managers/export')
+  const exportHref = qs(sp, { f: funnelId ? String(funnelId) : 'all' }, '/dashboard/managers/export')
   const totalClients = rows.reduce((a, r) => a + r.clients, 0) || 1
 
   return (
@@ -59,7 +59,7 @@ export default async function ManagersPage({ searchParams }: { searchParams: Pro
             <Link href={base({ p: 'quarter', from: null, to: null })} className={per.key === 'quarter' ? 'on' : ''}>Квартал</Link>
             <Link href={base({ p: 'range' })} className={per.key === 'range' ? 'on' : ''}>Свій діапазон</Link>
           </div>
-          <SelectPill name="f" label="Воронка" value={funnelId ? String(funnelId) : ''} options={[{ value: '', label: 'Усі' }, ...funnels.map((f) => ({ value: String(f.id), label: f.name }))]} />
+          <SelectPill name="f" label="Воронка" value={funnelId ? String(funnelId) : 'all'} options={[{ value: 'all', label: 'Усі' }, ...funnels.map((f) => ({ value: String(f.id), label: f.name }))]} />
           <a className="btn dark" href={exportHref}>Експорт у Excel</a>
         </div>
       </div>

@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useActionState, useEffect, useState, useTransition } from 'react'
+import { noReset } from '@/lib/noReset'
 import { changeUserRole, createRole, createUser, resetPassword, saveRole, setUserBlocked } from '@/app/actions/settings'
 import { SECTIONS, type Perms } from '@/server/permissions-meta'
 
@@ -94,6 +95,7 @@ export function NewUserForm({ roles, candidate }: { roles: { id: number; name: s
   const r = useRouter()
   const [st, act, pending] = useActionState(createUser, undefined)
   const [done, setDone] = useState<{ name: string; email: string; password: string } | null>(null)
+  const [, startT] = useTransition()
   useEffect(() => { if (st?.created) { setDone(st.created); r.refresh() } }, [st, r])
   const f = st?.fields ?? {}
   return (
@@ -107,7 +109,7 @@ export function NewUserForm({ roles, candidate }: { roles: { id: number; name: s
           <button className="btn light" onClick={() => setDone(null)}>Додати ще одного</button>
         </div>
       ) : (
-        <form action={act} className="g" style={{ gap: 14 }}>
+        <form onSubmit={noReset(act, startT)} className="g" style={{ gap: 14 }}>
           {st?.error && !Object.keys(f).length && <div className="alert bad" role="alert">{st.error}</div>}
           <div><label className="lbl" htmlFor="un">Ім’я *</label><input className={`input${f.name ? ' err' : ''}`} id="un" name="name" placeholder="Максим Лисенко" />{f.name && <div className="errmsg">{f.name}</div>}</div>
           <div><label className="lbl" htmlFor="ue">Email (логін) *</label><input className={`input${f.email ? ' err' : ''}`} id="ue" name="email" type="email" placeholder="maksym@energycrm.ua" />{f.email && <div className="errmsg" role="alert">{f.email}</div>}</div>

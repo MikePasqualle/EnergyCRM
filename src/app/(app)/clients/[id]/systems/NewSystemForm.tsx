@@ -1,12 +1,14 @@
 'use client'
 import Link from 'next/link'
-import { useActionState } from 'react'
+import { useActionState, useTransition } from 'react'
+import { noReset } from '@/lib/noReset'
 import { createSystem } from '@/app/actions/systems'
 
 export function NewSystemForm({ clientId, types, cancelHref, defaultAddress }: { clientId: number; types: string[]; cancelHref: string; defaultAddress: string }) {
   const [st, act, pending] = useActionState(createSystem.bind(null, clientId), undefined)
+  const [, startT] = useTransition()
   return (
-    <form action={act} className="g" style={{ gap: 14 }}>
+    <form onSubmit={noReset(act, startT)} className="g" style={{ gap: 14 }}>
       {st?.error && <div className="alert bad" role="alert">{st.error}</div>}
       <div><label className="lbl" htmlFor="ns">Назва системи *</label><input className="input" id="ns" name="name" required /></div>
       <div><label className="lbl" htmlFor="nt">Тип обʼєкта</label><select className="input" id="nt" name="objectType">{types.map((t) => <option key={t}>{t}</option>)}</select></div>

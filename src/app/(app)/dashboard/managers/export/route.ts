@@ -10,7 +10,7 @@ export async function GET(req: Request) {
   if (!u || u.mustChangePassword || !can(u, 'analytics', 'view') || !sees_all(u)) return new Response('Forbidden', { status: 403 })
   const sp = new URL(req.url).searchParams
   const per = parsePeriod(sp.get('p') ?? undefined, sp.get('from') ?? undefined, sp.get('to') ?? undefined)
-  const { rows } = await managersReport(Number(sp.get('f')) || null, per)
+  const { rows } = await managersReport(sp.get('f') === 'all' ? null : Number(sp.get('f')) || null, per)
   const wb = new ExcelJS.Workbook()
   const ws = wb.addWorksheet('Менеджери')
   ws.columns = [

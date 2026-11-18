@@ -6,3 +6,4 @@ src/generated
 test-results
 playwright-report
 backups
+.env.docker

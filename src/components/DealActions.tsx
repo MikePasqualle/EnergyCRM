@@ -1,5 +1,6 @@
 'use client'
 import { useActionState, useEffect, useState, useTransition } from 'react'
+import { noReset } from '@/lib/noReset'
 import { useRouter } from 'next/navigation'
 import { addPayment, deleteDeal, markClientActive, moveDeal, setPaymentStatus, updateDeal } from '@/app/actions/deals'
 import { Field } from './ui'
@@ -72,7 +73,7 @@ export function DealActions({ dealId, stages, currentStage, reasons, canEdit, ca
       )}
       {dlg === 'edit' && (
         <Dlg title="Редагування угоди" sub="Ціна продукту зафіксована в угоді й не змінюється" onClose={() => setDlg(null)}>
-          <form action={action} className="g" style={{ gap: 14 }}>
+          <form onSubmit={noReset(action, start)} className="g" style={{ gap: 14 }}>
             {st && !st.ok && <div className="alert bad" role="alert">{st.error}</div>}
             <div className="g" style={{ gridTemplateColumns: '1fr 1fr', gap: 14 }}>
               <Field label="Очікуваний обсяг, МВт·год/рік" htmlFor="volume"><input className="input" id="volume" name="volume" defaultValue={deal.volume} inputMode="decimal" /></Field>
@@ -101,6 +102,7 @@ export function PaymentButton({ dealId, suggested }: { dealId: number; suggested
   const r = useRouter()
   const [open, setOpen] = useState(false)
   const [st, action, pending] = useActionState(addPayment.bind(null, dealId), undefined)
+  const [, startP] = useTransition()
   useEffect(() => { if (st?.ok) { setOpen(false); r.refresh() } }, [st, r])
   const f = st?.fields ?? {}
   return (
@@ -108,7 +110,7 @@ export function PaymentButton({ dealId, suggested }: { dealId: number; suggested
       <button className="btn dark" onClick={() => setOpen(true)} style={{ padding: '9px 16px' }}>+ Додати оплату</button>
       {open && (
         <Dlg title="Додати оплату" sub="Оплати вносяться вручну: аванс або рахунок" onClose={() => setOpen(false)} narrow>
-          <form action={action} className="g" style={{ gap: 14 }}>
+          <form onSubmit={noReset(action, startP)} className="g" style={{ gap: 14 }}>
             {st?.error && !Object.keys(f).length && <div className="alert bad" role="alert">{st.error}</div>}
             <Field label="Дата *" htmlFor="pd" error={f.date}><input className="input" id="pd" name="date" type="date" defaultValue={new Date().toISOString().slice(0, 10)} required /></Field>
             <Field label="Призначення *" htmlFor="pp" error={f.purpose}><input className="input" id="pp" name="purpose" list="purposes" defaultValue="Рахунок за місяць" /><datalist id="purposes"><option value="Аванс" /><option value="Рахунок за місяць" /></datalist></Field>

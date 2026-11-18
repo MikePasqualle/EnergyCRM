@@ -15,7 +15,7 @@ COPY . .
 RUN DATABASE_URL="postgresql://x@localhost:5432/x" npx prisma generate && npm run build
 
 FROM base AS runner
-ENV NODE_ENV=production PORT=3000 HOSTNAME=0.0.0.0
+ENV NODE_ENV=production PORT=3000 HOSTNAME=0.0.0.0 HOME=/tmp npm_config_update_notifier=false
 RUN apt-get update && apt-get install -y --no-install-recommends postgresql-client ca-certificates && rm -rf /var/lib/apt/lists/* \
  && useradd --system --uid 1001 app
 COPY --from=build --chown=app /app/package.json ./package.json

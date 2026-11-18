@@ -51,7 +51,7 @@ export async function login(email: string, password: string, remember: boolean):
   })
   ;(await cookies()).set(COOKIE, token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: process.env.NODE_ENV === 'production' && process.env.COOKIE_SECURE !== 'false',
     sameSite: 'lax',
     path: '/',
     maxAge: idle * 60,

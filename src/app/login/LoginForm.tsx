@@ -1,13 +1,15 @@
 'use client'
-import { useActionState, useState } from 'react'
+import { useActionState, useState, useTransition } from 'react'
+import { noReset } from '@/lib/noReset'
 import { loginAction } from '@/app/actions/auth'
 
 export function LoginForm() {
   const [state, action, pending] = useActionState(loginAction, undefined)
   const [show, setShow] = useState(false)
   const [forgot, setForgot] = useState(false)
+  const [, startT] = useTransition()
   return (
-    <form className="card" action={action} style={{ width: 440, maxWidth: '100%', padding: 36 }}>
+    <form className="card" onSubmit={noReset(action, startT)} style={{ width: 440, maxWidth: '100%', padding: 36 }}>
       <div style={{ fontSize: 26, fontWeight: 700, letterSpacing: '-.02em', marginBottom: 6 }}>Вхід до системи</div>
       <div className="muted s13" style={{ marginBottom: 24 }}>Введіть логін і пароль, які вам видав адміністратор</div>
       {state?.error && <div className="alert bad" role="alert" style={{ marginBottom: 16 }}>{state.error}</div>}
