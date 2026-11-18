@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>Додати клієнта</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app" style="position:relative;min-height:1220px;overflow:hidden">
+  <header class="nav">
+    <div class="brand"><div class="logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0f1115" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg></div>EnergyCRM</div>
+    <nav class="tabs" aria-label="Основне меню"><a href="Dashboard.dc.html">Аналітика</a><a href="Funnels.dc.html">Воронки</a><a class="on" href="Clients.dc.html">Клієнти</a><a href="Products.dc.html">Продукти</a><a href="Users.dc.html">Налаштування</a></nav>
+    <div class="navr"><div class="seg"><span>Мої</span><span class="on">Команда</span></div><button class="icobtn" aria-label="Сповіщення"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7M10 20a2 2 0 0 0 4 0"/></svg></button><div class="avatar a1">МП</div></div>
+  </header>
+  <div class="head"><div><h1 class="title">Клієнти</h1><div class="sub">Реєстр споживачів · 1 248 записів</div></div><a class="btn dark" href="#" style="height:46px;padding:0 22px">+ Додати клієнта</a></div>
+  <div class="card" style="padding:8px"><table class="tbl"><tbody>
+    <tr><td><b>ТОВ «Агрохолдинг Схід»</b></td><td>Дійсний</td><td>А</td><td>Олена К.</td></tr>
+    <tr><td><b>ТОВ «Логістик Плюс»</b></td><td>Дійсний</td><td>А</td><td>Ірина Ш.</td></tr>
+    <tr><td><b>ФОП Коваленко І.</b></td><td>Теплий</td><td>Б</td><td>Андрій П.</td></tr>
+    <tr><td><b>ПП «Будінвест»</b></td><td>Холодний</td><td>А</td><td>Ірина Ш.</td></tr>
+  </tbody></table></div>
+
+  <div style="position:absolute;inset:0;background:rgba(14,18,28,.5)"></div>
+
+  <div role="dialog" aria-label="Додати клієнта" style="position:absolute;left:50%;top:76px;transform:translateX(-50%);width:860px;max-width:calc(100% - 48px);background:#fff;border-radius:26px;padding:30px 34px;box-shadow:0 30px 80px rgba(8,16,40,.35)">
+    <div class="row" style="justify-content:space-between;margin-bottom:20px"><div><div style="font-size:24px;font-weight:700;letter-spacing:-.02em">Новий клієнт</div><div class="s13 muted" style="margin-top:4px">Поля, позначені *, обов’язкові</div></div><a href="Clients.dc.html" class="btn light" aria-label="Закрити" style="width:40px;height:40px;padding:0;border-radius:50%;font-size:18px">×</a></div>
+
+    <div style="background:#fff6dc;border:1px solid #f1dc94;border-radius:14px;padding:12px 16px;margin-bottom:20px" class="row s13"><div style="flex:1"><b>Знайдено схожого клієнта за телефоном:</b> ФОП Коваленко І. · +380 63 774 10 09</div><a href="#" class="b" style="color:#1a479a">Відкрити</a><a href="#" class="b" style="color:#1a479a">Обʼєднати</a><a href="#" class="b" style="color:#586072">Зберегти все одно</a></div>
+
+    <label class="lbl">Тип клієнта *</label>
+    <div class="seg" style="background:#eef1f5;width:fit-content;margin-bottom:18px"><span class="on">Юридична особа</span><span>ФОП</span><span>Фізична особа</span></div>
+
+    <div class="g" style="grid-template-columns:1.4fr 1fr;gap:16px">
+      <div><label class="lbl">Назва компанії *</label><div class="input">ТОВ «Нова Енергія Плюс»</div></div>
+      <div><label class="lbl">ЄДРПОУ</label><div class="input num">38 204 117</div></div>
+      <div><label class="lbl">Контактна особа</label><div class="input">Тарас Бондаренко</div></div>
+      <div><label class="lbl">Телефон *</label><div class="input num">+380 63 774 10 09</div><div class="hint" style="color:#9c1f16">Такий номер уже є в реєстрі</div></div>
+      <div><label class="lbl">Email</label><div class="input">t.bondarenko@novaenergy.ua</div></div>
+      <div><label class="lbl">Місто</label><div class="input">Харків <span>▾</span></div></div>
+      <div style="grid-column:1/3"><label class="lbl">Адреса</label><div class="input">вул. Сумська, 41, оф. 12</div></div>
+    </div>
+
+    <div class="sep" style="margin:22px 0"></div>
+    <div class="g" style="grid-template-columns:repeat(3,minmax(0,1fr));gap:16px">
+      <div><label class="lbl">Статус контакту *</label><div class="seg sm" style="background:#eef1f5"><span class="on" style="background:#a9c7f5;color:#10131a">Холодний</span><span>Теплий</span><span>Дійсний</span></div></div>
+      <div><label class="lbl">Джерело</label><div class="input">Холодний обзвон <span>▾</span></div></div>
+      <div><label class="lbl">Закріплений менеджер *</label><div class="input"><span class="row" style="gap:8px"><span class="avatar a2" style="width:24px;height:24px;font-size:9px">ОК</span>Олена Коваль</span><span>▾</span></div></div>
+    </div>
+
+    <div class="sep" style="margin:22px 0"></div>
+    <div class="row" style="justify-content:space-between;margin-bottom:12px"><b>Налаштування споживача</b><span class="s12 muted">Можна заповнити пізніше в картці клієнта</span></div>
+    <div class="g" style="grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:end">
+      <div><label class="lbl">Група споживача</label><div class="seg sm" style="background:#eef1f5"><span class="on">А</span><span>Б</span><span>Не визначено</span></div></div>
+      <div><label class="lbl">Поточний постачальник</label><div class="input">Енергоінвест <span>▾</span></div></div>
+      <div class="row" style="gap:12px;padding-bottom:10px"><div class="sw"></div><span class="s13 b">Є власна генерація</span></div>
+    </div>
+
+    <div class="sep" style="margin:22px 0"></div>
+    <div class="row" style="gap:12px"><span class="cb on"></span><b>Одразу створити угоду</b></div>
+    <div class="g" style="grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:12px">
+      <div><label class="lbl">Воронка *</label><div class="input">Продаж бізнесу <span>▾</span></div></div>
+      <div><label class="lbl">Продукт *</label><div class="input">Бізнес Стандарт <span>▾</span></div></div>
+      <div><label class="lbl">Очікуваний обсяг, МВт·год</label><div class="input num">600</div></div>
+    </div>
+    <div class="row" style="justify-content:flex-end;margin-top:26px"><a class="btn line" href="Clients.dc.html">Скасувати</a><a class="btn light" href="Clients.dc.html">Зберегти й додати ще</a><a class="btn dark" href="Client.dc.html">Зберегти клієнта</a></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1120}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

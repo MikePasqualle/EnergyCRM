@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>Аналітика</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app">
+  <header class="nav">
+    <div class="brand"><div class="logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0f1115" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg></div>EnergyCRM</div>
+    <nav class="tabs" aria-label="Основне меню"><a class="on" href="Dashboard.dc.html">Аналітика</a><a href="Funnels.dc.html">Воронки</a><a href="Clients.dc.html">Клієнти</a><a href="Products.dc.html">Продукти</a><a href="Users.dc.html">Налаштування</a></nav>
+    <div class="navr"><div class="seg"><span>Мої</span><span class="on">Команда</span></div><button class="icobtn" aria-label="Сповіщення"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7M10 20a2 2 0 0 0 4 0"/></svg></button><div class="avatar a1">МП</div></div>
+  </header>
+
+  <div class="head">
+    <div class="row" style="gap:14px"><div class="avatar a1" style="width:52px;height:52px;font-size:17px">МП</div><div><h1 class="title">Доброго дня, Михайле!</h1><div class="sub">Стан продажів на 17 листопада 2026 · роль: Адмін</div></div></div>
+    <div class="row" style="flex-wrap:wrap">
+      <div class="seg" style="background:rgba(255,255,255,.7)"><a href="#">Тиждень</a><a class="on" href="#">Місяць</a><a href="#">Квартал</a><a href="#">Свій діапазон</a></div>
+      <div class="input" style="width:190px;background:#fff">Воронка: Усі <span>▾</span></div>
+      <div class="input" style="width:190px;background:#fff">Менеджер: Усі <span>▾</span></div>
+    </div>
+  </div>
+
+  <div class="g" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+    <div class="card">
+      <div class="muted s13 b">Клієнти</div>
+      <div class="stat num" style="margin:12px 0 14px">1 248</div>
+      <div style="display:flex;height:10px;border-radius:6px;overflow:hidden;gap:2px"><i style="flex:612;background:#a9c7f5"></i><i style="flex:301;background:#f7c948"></i><i style="flex:335;background:#0f1115"></i></div>
+      <div class="row s12" style="gap:12px;margin-top:10px;flex-wrap:wrap"><span><b>612</b> холодні</span><span><b>301</b> теплі</span><span><b>335</b> дійсні</span></div>
+    </div>
+    <div class="card">
+      <div class="muted s13 b">Угоди в роботі</div>
+      <div class="stat num" style="margin:12px 0 14px">186</div>
+      <div class="s13">На суму <b>12,4 млн ₴</b></div>
+      <div class="row s12" style="gap:8px;margin-top:10px"><span class="chip c-green">Виграно 74</span><span class="chip c-red">Втрачено 29</span></div>
+    </div>
+    <div class="card">
+      <div class="muted s13 b">Оплати за період</div>
+      <div class="stat num" style="margin:12px 0 14px">74</div>
+      <div class="s13">Отримано <b>3,82 млн ₴</b></div>
+      <div class="row s12" style="margin-top:10px"><span class="chip c-green">▲ 12% до жовтня</span></div>
+    </div>
+    <div class="yel">
+      <div class="s13 b" style="color:#3b2f00">Споживання клієнтів</div>
+      <div class="stat num" style="margin:12px 0 6px">2,46</div>
+      <div class="s13 b" style="color:#3b2f00">ГВт·год за листопад</div>
+      <div class="row s12" style="gap:8px;margin-top:12px;flex-wrap:wrap"><span class="chip" style="background:#fff">Група А 71%</span><span class="chip" style="background:#fff">Група Б 29%</span></div>
+    </div>
+  </div>
+
+  <div class="g" style="grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);margin-top:16px">
+    <div class="card">
+      <div class="row" style="justify-content:space-between;margin-bottom:6px"><h3 style="margin:0">Угоди по етапах воронки «Продаж бізнесу»</h3><a class="btn light" href="Funnels.dc.html" style="padding:8px 14px">Відкрити воронку</a></div>
+      <div class="g" style="gap:14px;margin-top:16px">
+        <div><div class="row" style="justify-content:space-between" ><span class="b s13">Новий контакт</span><span class="s13 muted num">71 угода · 2,9 млн ₴</span></div><div class="bar" style="margin-top:7px;height:14px"><i style="width:100%;background:#a9c7f5"></i></div></div>
+        <div><div class="row" style="justify-content:space-between"><span class="b s13">Розмова</span><span class="s13 muted num">52 угоди · 3,6 млн ₴</span></div><div class="bar" style="margin-top:7px;height:14px"><i style="width:73%;background:#7fa9ee"></i></div></div>
+        <div><div class="row" style="justify-content:space-between"><span class="b s13">Пропозиція</span><span class="s13 muted num">38 угод · 3,4 млн ₴</span></div><div class="bar" style="margin-top:7px;height:14px"><i style="width:54%;background:#f7c948"></i></div></div>
+        <div><div class="row" style="justify-content:space-between"><span class="b s13">Договір</span><span class="s13 muted num">25 угод · 2,5 млн ₴</span></div><div class="bar" style="margin-top:7px;height:14px"><i style="width:35%;background:#0f1115"></i></div></div>
+        <div><div class="row" style="justify-content:space-between"><span class="b s13">Оплата (виграно)</span><span class="s13 muted num">74 угоди · 3,82 млн ₴</span></div><div class="bar" style="margin-top:7px;height:14px"><i style="width:100%;background:#4cbf78"></i></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row" style="justify-content:space-between;margin-bottom:6px"><h3 style="margin:0">Споживання за 12 місяців, МВт·год</h3></div>
+      <div style="display:flex;align-items:flex-end;gap:9px;height:210px;margin-top:20px;padding-top:30px">
+        <div style="flex:1;text-align:center"><div style="height:122px;background:#cfd8e6;border-radius:8px"></div><div class="s12 muted" style="margin-top:8px">Гру</div></div>
+        <div style="flex:1;text-align:center"><div style="height:135px;background:#cfd8e6;border-radius:8px"></div><div class="s12 muted" style="margin-top:8px">Січ</div></div>
+        <div style="flex:1;text-align:center"><div style="height:128px;background:#cfd8e6;border-radius:8px"></div><div class="s12 muted" style="margin-top:8px">Лют</div></div>
+        <div style="flex:1;text-align:center"><div style="height:118px;background:#cfd8e6;border-radius:8px"></div><div class="s12 muted" style="margin-top:8px">Бер</div></div>
+        <div style="flex:1;text-align:center"><div style="height:104px;background:#cfd8e6;border-radius:8px"></div><div class="s12 muted" style="margin-top:8px">Кві</div></div>
+        <div style="flex:1;text-align:center"><div style="height:96px;background:#cfd8e6;border-radius:8px"></div><div class="s12 muted" style="margin-top:8px">Тра</div></div>
+        <div style="flex:1;text-align:center"><div style="height:92px;background:#cfd8e6;border-radius:8px"></div><div class="s12 muted" style="margin-top:8px">Чер</div></div>
+        <div style="flex:1;text-align:center"><div style="height:100px;background:#cfd8e6;border-radius:8px"></div><div class="s12 muted" style="margin-top:8px">Лип</div></div>
+        <div style="flex:1;text-align:center"><div style="height:108px;background:#cfd8e6;border-radius:8px"></div><div class="s12 muted" style="margin-top:8px">Сер</div></div>
+        <div style="flex:1;text-align:center"><div style="height:124px;background:#cfd8e6;border-radius:8px"></div><div class="s12 muted" style="margin-top:8px">Вер</div></div>
+        <div style="flex:1;text-align:center"><div style="height:140px;background:#cfd8e6;border-radius:8px"></div><div class="s12 muted" style="margin-top:8px">Жов</div></div>
+        <div style="flex:1;text-align:center;position:relative"><div style="position:absolute;top:-34px;left:50%;transform:translateX(-50%);background:#0f1115;color:#fff;border-radius:8px;padding:4px 8px;font-size:11px;font-weight:700;white-space:nowrap">2 460</div><div style="height:158px;background:#f7c948;border-radius:8px"></div><div class="s12 b" style="margin-top:8px">Лис</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:16px">
+    <div class="card">
+      <h3>Споживання за групою та постачальником</h3>
+      <div class="row" style="gap:22px">
+        <div style="position:relative;width:124px;height:124px;border-radius:50%;background:conic-gradient(#0f1115 0 71%,#f7c948 71% 100%);flex:none"><div style="position:absolute;inset:24px;background:#fff;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px">А / Б</div></div>
+        <div class="g s13" style="gap:10px;flex:1">
+          <div class="row" style="justify-content:space-between"><span class="row" style="gap:8px"><i style="width:10px;height:10px;border-radius:3px;background:#0f1115"></i>Група А</span><b class="num">1 747</b></div>
+          <div class="row" style="justify-content:space-between"><span class="row" style="gap:8px"><i style="width:10px;height:10px;border-radius:3px;background:#f7c948"></i>Група Б</span><b class="num">713</b></div>
+          <div class="sep" style="margin:2px 0"></div>
+          <div class="row" style="justify-content:space-between"><span>ТОВ «Укрсбут»</span><b class="num">48%</b></div>
+          <div class="row" style="justify-content:space-between"><span>Інші постачальники</span><b class="num">52%</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row" style="justify-content:space-between"><h3 style="margin:0 0 14px">Останні оплати</h3><span class="s13 muted">за місяць</span></div>
+      <table class="tbl"><tbody>
+        <tr><td><b>ТОВ «Агрохолдинг Схід»</b><div class="s12 muted">Договір · Бізнес Стандарт</div></td><td class="num b" style="text-align:right">412 800 ₴</td></tr>
+        <tr><td><b>ФОП Коваленко І.</b><div class="s12 muted">Договір · Бізнес Мініум</div></td><td class="num b" style="text-align:right">38 450 ₴</td></tr>
+        <tr><td><b>ПрАТ «Київхліб»</b><div class="s12 muted">Договір · Бізнес Стандарт</div></td><td class="num b" style="text-align:right">287 900 ₴</td></tr>
+        <tr><td><b>ТОВ «Логістик Плюс»</b><div class="s12 muted">Аванс · Бізнес Гарант</div></td><td class="num b" style="text-align:right">150 000 ₴</td></tr>
+      </tbody></table>
+    </div>
+    <div class="card">
+      <div class="row" style="justify-content:space-between"><h3 style="margin:0 0 14px">Менеджери — відпрацьовано</h3><a class="s13 b" href="Managers.dc.html" style="color:#1a479a">Усі →</a></div>
+      <div class="g" style="gap:12px">
+        <div class="row"><div class="avatar a2">ОК</div><div style="flex:1"><div class="b s13">Олена Коваль</div><div class="bar" style="margin-top:6px"><i style="width:92%"></i></div></div><span class="num b s13">184</span></div>
+        <div class="row"><div class="avatar a3">ДМ</div><div style="flex:1"><div class="b s13">Денис Мороз</div><div class="bar" style="margin-top:6px"><i style="width:76%"></i></div></div><span class="num b s13">152</span></div>
+        <div class="row"><div class="avatar a4">ІШ</div><div style="flex:1"><div class="b s13">Ірина Шевчук</div><div class="bar" style="margin-top:6px"><i style="width:61%"></i></div></div><span class="num b s13">121</span></div>
+        <div class="row"><div class="avatar a5">АП</div><div style="flex:1"><div class="b s13">Андрій Петренко</div><div class="bar" style="margin-top:6px"><i style="width:48%"></i></div></div><span class="num b s13">96</span></div>
+        <div class="s12 muted">Контактів за листопад (дзвінки, листи, зустрічі)</div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1240}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

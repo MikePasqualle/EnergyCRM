@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>Воронки</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app">
+  <header class="nav">
+    <div class="brand"><div class="logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0f1115" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg></div>EnergyCRM</div>
+    <nav class="tabs" aria-label="Основне меню"><a href="Dashboard.dc.html">Аналітика</a><a class="on" href="Funnels.dc.html">Воронки</a><a href="Clients.dc.html">Клієнти</a><a href="Products.dc.html">Продукти</a><a href="Users.dc.html">Налаштування</a></nav>
+    <div class="navr"><div class="seg"><span>Мої</span><span class="on">Команда</span></div><button class="icobtn" aria-label="Сповіщення"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7M10 20a2 2 0 0 0 4 0"/></svg></button><div class="avatar a1">МП</div></div>
+  </header>
+
+  <div class="head">
+    <div><h1 class="title">Воронки продажу</h1><div class="sub">186 угод у роботі · 12,4 млн ₴ · перетягуйте картки між етапами</div></div>
+    <div class="row" style="flex-wrap:wrap"><a class="btn line" href="FunnelSettings.dc.html">Налаштувати воронку</a><a class="btn dark" href="#">+ Нова угода</a></div>
+  </div>
+
+  <div class="row" style="gap:12px;flex-wrap:wrap;margin-bottom:16px">
+    <div class="subtabs"><a class="on" href="#">Продаж бізнесу</a><a href="#">Продаж населенню</a><a href="#">Повернення клієнтів</a></div>
+    <div class="input" style="width:230px;background:#fff;color:#586072">Пошук за клієнтом…</div>
+    <div class="input" style="width:190px;background:#fff">Менеджер: Усі <span>▾</span></div>
+    <div class="input" style="width:190px;background:#fff">Продукт: Усі <span>▾</span></div>
+    <div class="input" style="width:150px;background:#fff">Група: А і Б <span>▾</span></div>
+  </div>
+
+  <div style="display:flex;gap:12px;align-items:flex-start">
+    <section class="kcol" aria-label="Новий контакт">
+      <div class="row" style="justify-content:space-between"><b>Новий контакт</b><span class="chip c-gray">71</span></div>
+      <div class="s12 muted num" style="margin:4px 0 8px">2,9 млн ₴</div><div style="height:4px;border-radius:4px;background:#a9c7f5"></div>
+      <a class="deal" href="Deal.dc.html"><div class="row" style="justify-content:space-between"><b class="s13">ТОВ «Зелений Дім»</b><span class="chip c-blue">Б</span></div><div class="s12 muted" style="margin:3px 0 10px">Бізнес Стандарт</div><div class="row" style="justify-content:space-between"><b class="num">186 400 ₴</b><span class="s12 muted num">520 МВт·год</span></div><div class="row" style="justify-content:space-between;margin-top:10px"><div class="row s12 muted" style="gap:6px"><div class="avatar a2" style="width:24px;height:24px;font-size:10px">ОК</div>Олена К.</div><span class="s12 muted">17 лис</span></div></a>
+      <a class="deal" href="Deal.dc.html"><div class="row" style="justify-content:space-between"><b class="s13">ФОП Мельник О.</b><span class="chip c-blue">Б</span></div><div class="s12 muted" style="margin:3px 0 10px">Бізнес Мініум</div><div class="row" style="justify-content:space-between"><b class="num">24 800 ₴</b><span class="s12 muted num">64 МВт·год</span></div><div class="row" style="justify-content:space-between;margin-top:10px"><div class="row s12 muted" style="gap:6px"><div class="avatar a3" style="width:24px;height:24px;font-size:10px">ДМ</div>Денис М.</div><span class="s12 muted">16 лис</span></div></a>
+      <a class="deal" href="Deal.dc.html"><div class="row" style="justify-content:space-between"><b class="s13">ПП «Будінвест»</b><span class="chip c-purple">А</span></div><div class="s12 muted" style="margin:3px 0 10px">Бізнес Гарант</div><div class="row" style="justify-content:space-between"><b class="num">612 000 ₴</b><span class="s12 muted num">1 740 МВт·год</span></div><div class="row" style="justify-content:space-between;margin-top:10px"><div class="row s12 muted" style="gap:6px"><div class="avatar a4" style="width:24px;height:24px;font-size:10px">ІШ</div>Ірина Ш.</div><span class="s12 muted">14 лис</span></div></a>
+      <a class="btn light" href="#" style="width:100%;margin-top:12px;font-size:13px">+ Додати угоду</a>
+    </section>
+    <section class="kcol" aria-label="Розмова">
+      <div class="row" style="justify-content:space-between"><b>Розмова</b><span class="chip c-gray">52</span></div>
+      <div class="s12 muted num" style="margin:4px 0 8px">3,6 млн ₴</div><div style="height:4px;border-radius:4px;background:#7fa9ee"></div>
+      <a class="deal" href="Deal.dc.html"><div class="row" style="justify-content:space-between"><b class="s13">ТОВ «Логістик Плюс»</b><span class="chip c-purple">А</span></div><div class="s12 muted" style="margin:3px 0 10px">Бізнес Гарант</div><div class="row" style="justify-content:space-between"><b class="num">840 000 ₴</b><span class="s12 muted num">2 380 МВт·год</span></div><div class="row" style="justify-content:space-between;margin-top:10px"><div class="row s12 muted" style="gap:6px"><div class="avatar a2" style="width:24px;height:24px;font-size:10px">ОК</div>Олена К.</div><span class="chip c-orange">Дзвінок сьогодні</span></div></a>
+      <a class="deal" href="Deal.dc.html"><div class="row" style="justify-content:space-between"><b class="s13">ФОП Коваленко І.</b><span class="chip c-blue">Б</span></div><div class="s12 muted" style="margin:3px 0 10px">Бізнес Мініум</div><div class="row" style="justify-content:space-between"><b class="num">38 450 ₴</b><span class="s12 muted num">96 МВт·год</span></div><div class="row" style="justify-content:space-between;margin-top:10px"><div class="row s12 muted" style="gap:6px"><div class="avatar a5" style="width:24px;height:24px;font-size:10px">АП</div>Андрій П.</div><span class="s12 muted">15 лис</span></div></a>
+      <a class="deal" href="Deal.dc.html"><div class="row" style="justify-content:space-between"><b class="s13">ТОВ «Агрокомплекс»</b><span class="chip c-purple">А</span></div><div class="s12 muted" style="margin:3px 0 10px">Бізнес Стандарт</div><div class="row" style="justify-content:space-between"><b class="num">1 120 000 ₴</b><span class="s12 muted num">3 100 МВт·год</span></div><div class="row" style="justify-content:space-between;margin-top:10px"><div class="row s12 muted" style="gap:6px"><div class="avatar a3" style="width:24px;height:24px;font-size:10px">ДМ</div>Денис М.</div><span class="s12 muted">12 лис</span></div></a>
+      <a class="btn light" href="#" style="width:100%;margin-top:12px;font-size:13px">+ Додати угоду</a>
+    </section>
+    <section class="kcol" aria-label="Пропозиція">
+      <div class="row" style="justify-content:space-between"><b>Пропозиція</b><span class="chip c-gray">38</span></div>
+      <div class="s12 muted num" style="margin:4px 0 8px">3,4 млн ₴</div><div style="height:4px;border-radius:4px;background:#f7c948"></div>
+      <a class="deal" href="Deal.dc.html"><div class="row" style="justify-content:space-between"><b class="s13">ПрАТ «Київхліб»</b><span class="chip c-purple">А</span></div><div class="s12 muted" style="margin:3px 0 10px">Бізнес Стандарт</div><div class="row" style="justify-content:space-between"><b class="num">287 900 ₴</b><span class="s12 muted num">810 МВт·год</span></div><div class="row" style="justify-content:space-between;margin-top:10px"><div class="row s12 muted" style="gap:6px"><div class="avatar a4" style="width:24px;height:24px;font-size:10px">ІШ</div>Ірина Ш.</div><span class="chip c-yellow">КП надіслано</span></div></a>
+      <a class="deal" href="Deal.dc.html"><div class="row" style="justify-content:space-between"><b class="s13">Готель «Карпатія»</b><span class="chip c-blue">Б</span></div><div class="s12 muted" style="margin:3px 0 10px">Бізнес Стандарт</div><div class="row" style="justify-content:space-between"><b class="num">96 300 ₴</b><span class="s12 muted num">270 МВт·год</span></div><div class="row" style="justify-content:space-between;margin-top:10px"><div class="row s12 muted" style="gap:6px"><div class="avatar a1" style="width:24px;height:24px;font-size:10px">СБ</div>Софія Б.</div><span class="s12 muted">10 лис</span></div></a>
+      <a class="btn light" href="#" style="width:100%;margin-top:12px;font-size:13px">+ Додати угоду</a>
+    </section>
+    <section class="kcol" aria-label="Договір">
+      <div class="row" style="justify-content:space-between"><b>Договір</b><span class="chip c-gray">25</span></div>
+      <div class="s12 muted num" style="margin:4px 0 8px">2,5 млн ₴</div><div style="height:4px;border-radius:4px;background:#0f1115"></div>
+      <a class="deal" href="Deal.dc.html"><div class="row" style="justify-content:space-between"><b class="s13">ТОВ «Теплобуд»</b><span class="chip c-purple">А</span></div><div class="s12 muted" style="margin:3px 0 10px">Бізнес Гарант</div><div class="row" style="justify-content:space-between"><b class="num">524 000 ₴</b><span class="s12 muted num">1 490 МВт·год</span></div><div class="row" style="justify-content:space-between;margin-top:10px"><div class="row s12 muted" style="gap:6px"><div class="avatar a2" style="width:24px;height:24px;font-size:10px">ОК</div>Олена К.</div><span class="chip c-blue">На підписанні</span></div></a>
+      <a class="deal" href="Deal.dc.html"><div class="row" style="justify-content:space-between"><b class="s13">ФОП Гнатюк В.</b><span class="chip c-blue">Б</span></div><div class="s12 muted" style="margin:3px 0 10px">Бізнес Мініум</div><div class="row" style="justify-content:space-between"><b class="num">31 200 ₴</b><span class="s12 muted num">80 МВт·год</span></div><div class="row" style="justify-content:space-between;margin-top:10px"><div class="row s12 muted" style="gap:6px"><div class="avatar a3" style="width:24px;height:24px;font-size:10px">ДМ</div>Денис М.</div><span class="s12 muted">9 лис</span></div></a>
+      <a class="btn light" href="#" style="width:100%;margin-top:12px;font-size:13px">+ Додати угоду</a>
+    </section>
+    <section class="kcol" aria-label="Оплата">
+      <div class="row" style="justify-content:space-between"><b>Оплата</b><span class="chip c-green">74 · виграно</span></div>
+      <div class="s12 muted num" style="margin:4px 0 8px">3,82 млн ₴</div><div style="height:4px;border-radius:4px;background:#4cbf78"></div>
+      <a class="deal" href="Deal.dc.html"><div class="row" style="justify-content:space-between"><b class="s13">ТОВ «Агрохолдинг Схід»</b><span class="chip c-purple">А</span></div><div class="s12 muted" style="margin:3px 0 10px">Бізнес Стандарт</div><div class="row" style="justify-content:space-between"><b class="num">412 800 ₴</b><span class="s12 muted num">1 160 МВт·год</span></div><div class="row" style="justify-content:space-between;margin-top:10px"><div class="row s12 muted" style="gap:6px"><div class="avatar a2" style="width:24px;height:24px;font-size:10px">ОК</div>Олена К.</div><span class="chip c-green">Оплачено</span></div></a>
+      <a class="deal" href="Deal.dc.html"><div class="row" style="justify-content:space-between"><b class="s13">ТОВ «Логістик Плюс»</b><span class="chip c-purple">А</span></div><div class="s12 muted" style="margin:3px 0 10px">Бізнес Гарант · аванс</div><div class="row" style="justify-content:space-between"><b class="num">150 000 ₴</b><span class="s12 muted num">2 380 МВт·год</span></div><div class="row" style="justify-content:space-between;margin-top:10px"><div class="row s12 muted" style="gap:6px"><div class="avatar a4" style="width:24px;height:24px;font-size:10px">ІШ</div>Ірина Ш.</div><span class="chip c-green">Оплачено</span></div></a>
+    </section>
+    <section class="kcol" aria-label="Втрачено" style="flex:0 0 190px">
+      <div class="row" style="justify-content:space-between"><b>Втрачено</b><span class="chip c-red">29</span></div>
+      <div class="s12 muted num" style="margin:4px 0 8px">1,9 млн ₴</div><div style="height:4px;border-radius:4px;background:#e8837a"></div>
+      <a class="deal" href="Deal.dc.html"><b class="s13">ТОВ «Сигма»</b><div class="s12 muted" style="margin:3px 0 8px">Бізнес Стандарт · 214 000 ₴</div><span class="chip c-red">Обрали іншого постачальника</span></a>
+      <a class="deal" href="Deal.dc.html"><b class="s13">ФОП Лисенко Р.</b><div class="s12 muted" style="margin:3px 0 8px">Бізнес Мініум · 22 600 ₴</div><span class="chip c-red">Не відповідає</span></a>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1040}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

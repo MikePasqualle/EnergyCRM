@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>Продукти</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app">
+  <header class="nav">
+    <div class="brand"><div class="logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0f1115" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg></div>EnergyCRM</div>
+    <nav class="tabs" aria-label="Основне меню"><a href="Dashboard.dc.html">Аналітика</a><a href="Funnels.dc.html">Воронки</a><a href="Clients.dc.html">Клієнти</a><a class="on" href="Products.dc.html">Продукти</a><a href="Users.dc.html">Налаштування</a></nav>
+    <div class="navr"><div class="seg"><span>Мої</span><span class="on">Команда</span></div><button class="icobtn" aria-label="Сповіщення"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7M10 20a2 2 0 0 0 4 0"/></svg></button><div class="avatar a1">МП</div></div>
+  </header>
+
+  <div class="head">
+    <div><h1 class="title">Продукти</h1><div class="sub">Тарифні пропозиції, які підставляються в угоди · редагує лише адміністратор</div></div>
+    <a class="btn dark" href="#" style="height:46px;padding:0 22px">+ Додати продукт</a>
+  </div>
+
+  <div class="g" style="grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);align-items:start">
+    <div class="card" style="padding:8px 8px 4px">
+      <div class="row" style="padding:12px 12px 4px;gap:10px"><div class="subtabs" style="background:#eef1f5"><a class="on" href="#">Активні · 4</a><a href="#">Архів · 1</a></div></div>
+      <table class="tbl">
+        <thead><tr><th>Продукт</th><th>Тарифна модель</th><th style="text-align:right">Ціна, ₴/МВт·год</th><th>Група</th><th style="text-align:right">Угод</th><th>Статус</th></tr></thead>
+        <tbody>
+          <tr style="background:#f1f6fe"><td><b>Бізнес Стандарт</b><div class="s12 muted">Термін 12 міс.</div></td><td class="s13">Фіксована</td><td class="num b" style="text-align:right">4 270</td><td><span class="chip c-gray">А і Б</span></td><td class="num" style="text-align:right">63</td><td><span class="chip c-green">Активний</span></td></tr>
+          <tr><td><b>Бізнес Гарант</b><div class="s12 muted">Термін 24 міс.</div></td><td class="s13">Фіксована з гарантією ціни</td><td class="num b" style="text-align:right">4 230</td><td><span class="chip c-purple">А</span></td><td class="num" style="text-align:right">52</td><td><span class="chip c-green">Активний</span></td></tr>
+          <tr><td><b>Бізнес Мініум</b><div class="s12 muted">Термін 6 міс.</div></td><td class="s13">Фіксована</td><td class="num b" style="text-align:right">4 700</td><td><span class="chip c-blue">Б</span></td><td class="num" style="text-align:right">41</td><td><span class="chip c-green">Активний</span></td></tr>
+          <tr><td><b>Дім Базовий</b><div class="s12 muted">Термін 12 міс.</div></td><td class="s13">Фіксована</td><td class="num b" style="text-align:right">4 320</td><td><span class="chip c-blue">Б</span></td><td class="num" style="text-align:right">29</td><td><span class="chip c-green">Активний</span></td></tr>
+        </tbody>
+      </table>
+      <div class="s12 muted" style="padding:12px">Архівний продукт «Пілот 2025» не пропонується для нових угод, але лишається в історичних.</div>
+    </div>
+
+    <div class="card">
+      <div class="row" style="justify-content:space-between;margin-bottom:16px"><h3 style="margin:0">Редагування продукту</h3><span class="chip c-green">Активний</span></div>
+      <div class="g" style="gap:14px">
+        <div><label class="lbl">Назва *</label><div class="input">Бізнес Стандарт</div></div>
+        <div><label class="lbl">Опис</label><div class="input area">Фіксована ціна електроенергії для бізнесу на 12 місяців. Підходить споживачам групи А та Б, погодинне врегулювання небалансів включено.</div></div>
+        <div class="g" style="grid-template-columns:1fr 1fr;gap:14px">
+          <div><label class="lbl">Ціна, ₴/МВт·год *</label><div class="input num">4 270</div><div class="hint">Це 4,27 ₴/кВт·год</div></div>
+          <div><label class="lbl">Тарифна модель</label><div class="input">Фіксована <span>▾</span></div></div>
+          <div><label class="lbl">Термін дії, міс.</label><div class="input num">12</div></div>
+          <div><label class="lbl">Мінімальний обсяг, МВт·год/рік</label><div class="input num">120</div></div>
+        </div>
+        <div><label class="lbl">Для групи споживачів</label><div class="seg" style="background:#eef1f5;width:fit-content"><span>Група А</span><span>Група Б</span><span class="on">Обидві</span></div></div>
+        <div><label class="lbl">Умови</label><div class="input area" style="height:72px">Оплата за фактом, рахунок до 5-го числа. Дострокове розірвання — за 30 днів.</div></div>
+        <div style="background:#eef3fc;border-radius:14px;padding:12px 16px" class="s13">Зміна ціни <b>не змінює</b> суму вже створених угод — ціна фіксується в угоді на момент її створення.</div>
+        <div class="row" style="justify-content:space-between"><a class="btn danger" href="#">Архівувати</a><div class="row"><a class="btn line" href="#">Скасувати</a><a class="btn dark" href="#">Зберегти</a></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

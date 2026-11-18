@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>Вхід</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app" style="min-height:900px;display:flex;flex-direction:column">
+  <header class="nav">
+    <div class="brand"><div class="logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0f1115" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></div>EnergyCRM</div>
+    <span class="s13 muted">Внутрішня платформа продажу електроенергії</span>
+  </header>
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;gap:56px;flex-wrap:wrap;padding:48px 0 0">
+    <div style="max-width:540px;flex:1 1 380px">
+      <h1 style="font-size:54px;line-height:1.05;letter-spacing:-.035em;margin:0 0 18px;font-weight:700">Усі клієнти й угоди з електроенергії - в одному місці</h1>
+      <p style="font-size:17px;line-height:1.5;color:#2c3a54;margin:0 0 24px">Воронки продажу, реєстр споживачів, графіки споживання та оплати. Доступ видає адміністратор.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <span class="chip c-yellow" style="font-size:13px;padding:7px 14px">Воронки й етапи</span>
+        <span class="chip c-green" style="font-size:13px;padding:7px 14px">Реєстр споживачів</span>
+        <span class="chip c-blue" style="font-size:13px;padding:7px 14px">Групи А та Б</span>
+        <span class="chip c-purple" style="font-size:13px;padding:7px 14px">Аналітика</span>
+      </div>
+    </div>
+    <form class="card" style="width:440px;max-width:100%;padding:36px" onsubmit="return false">
+      <div style="font-size:26px;font-weight:700;letter-spacing:-.02em;margin-bottom:6px">Вхід до системи</div>
+      <div class="muted s13" style="margin-bottom:24px">Введіть логін і пароль, які вам видав адміністратор</div>
+      <label class="lbl" for="em">Логін (email)</label>
+      <div class="input" id="em" style="margin-bottom:16px">mp@learntoearn.global</div>
+      <label class="lbl" for="pw">Пароль</label>
+      <div class="input" id="pw"><span style="letter-spacing:3px">••••••••••••</span><span class="s12 b" style="color:#1a479a">Показати</span></div>
+      <div class="row" style="justify-content:space-between;margin:16px 0 24px">
+        <span class="row s13" style="gap:8px"><span class="cb on"></span>Запамʼятати мене</span>
+        <span class="s13 b" style="color:#1a479a">Забули пароль?</span>
+      </div>
+      <a class="btn dark" href="Dashboard.dc.html" style="width:100%;height:48px;font-size:15px">Увійти</a>
+      <div class="sep" style="margin:22px 0 14px"></div>
+      <div class="s12 muted" style="line-height:1.5">Самостійної реєстрації немає. Новий акаунт створює адміністратор у розділі «Налаштування → Користувачі». Після 5 невдалих спроб вхід тимчасово блокується.</div>
+    </form>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<title>Налаштування — користувачі та ролі</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="app">
+  <header class="nav">
+    <div class="brand"><div class="logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="#0f1115" aria-hidden="true"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg></div>EnergyCRM</div>
+    <nav class="tabs" aria-label="Основне меню"><a href="Dashboard.dc.html">Аналітика</a><a href="Funnels.dc.html">Воронки</a><a href="Clients.dc.html">Клієнти</a><a href="Products.dc.html">Продукти</a><a class="on" href="Users.dc.html">Налаштування</a></nav>
+    <div class="navr"><div class="seg"><span>Мої</span><span class="on">Команда</span></div><button class="icobtn" aria-label="Сповіщення"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7M10 20a2 2 0 0 0 4 0"/></svg></button><div class="avatar a1">МП</div></div>
+  </header>
+
+  <div class="head">
+    <div><h1 class="title">Налаштування</h1><div class="sub">Користувачі, ролі, довідники та журнал дій · лише для адміністратора</div></div>
+    <a class="btn dark" href="#" style="height:46px;padding:0 22px">+ Додати користувача</a>
+  </div>
+
+  <div class="g" style="grid-template-columns:230px minmax(0,1fr);align-items:start">
+    <div class="card" style="padding:12px"><nav class="sidebar" aria-label="Розділи налаштувань"><a class="on" href="Users.dc.html">Користувачі та ролі</a><a href="Dictionaries.dc.html">Довідники</a><a href="Dictionaries.dc.html">Журнал дій</a><a href="FunnelSettings.dc.html">Воронки й етапи</a></nav></div>
+
+    <div class="g">
+      <div class="card" style="padding:8px 8px 4px">
+        <div class="row" style="justify-content:space-between;padding:12px 12px 4px"><h3 style="margin:0">Користувачі · 6</h3><div class="input" style="width:260px;height:38px;color:#586072">Пошук за іменем або email…</div></div>
+        <table class="tbl"><thead><tr><th>Користувач</th><th>Роль</th><th>Статус</th><th style="text-align:right">Клієнтів</th><th>Останній вхід</th><th style="text-align:right">Дії</th></tr></thead><tbody>
+          <tr><td><div class="row" style="gap:10px"><div class="avatar a1">МП</div><div><div class="b">Михайло Пацан</div><div class="s12 muted">mp@learntoearn.global</div></div></div></td><td><span class="chip c-purple">Адмін</span></td><td><span class="chip c-green">Активний</span></td><td class="num" style="text-align:right">—</td><td class="s13">Сьогодні, 09:14</td><td style="text-align:right" class="s12 muted">Власник акаунта</td></tr>
+          <tr><td><div class="row" style="gap:10px"><div class="avatar a2">ОК</div><div><div class="b">Олена Коваль</div><div class="s12 muted">olena@energycrm.ua</div></div></div></td><td><span class="chip c-blue">Користувач</span></td><td><span class="chip c-green">Активний</span></td><td class="num" style="text-align:right">312</td><td class="s13">Сьогодні, 08:52</td><td style="text-align:right"><a class="btn line" href="#" style="padding:7px 12px;font-size:13px">Скинути пароль</a> <a class="btn line" href="#" style="padding:7px 12px;font-size:13px">Заблокувати</a></td></tr>
+          <tr><td><div class="row" style="gap:10px"><div class="avatar a3">ДМ</div><div><div class="b">Денис Мороз</div><div class="s12 muted">denys@energycrm.ua</div></div></div></td><td><span class="chip c-blue">Користувач</span></td><td><span class="chip c-green">Активний</span></td><td class="num" style="text-align:right">268</td><td class="s13">Вчора, 18:20</td><td style="text-align:right"><a class="btn line" href="#" style="padding:7px 12px;font-size:13px">Скинути пароль</a> <a class="btn line" href="#" style="padding:7px 12px;font-size:13px">Заблокувати</a></td></tr>
+          <tr><td><div class="row" style="gap:10px"><div class="avatar a4">ІШ</div><div><div class="b">Ірина Шевчук</div><div class="s12 muted">iryna@energycrm.ua</div></div></div></td><td><span class="chip c-blue">Користувач</span></td><td><span class="chip c-green">Активний</span></td><td class="num" style="text-align:right">241</td><td class="s13">Сьогодні, 09:03</td><td style="text-align:right"><a class="btn line" href="#" style="padding:7px 12px;font-size:13px">Скинути пароль</a> <a class="btn line" href="#" style="padding:7px 12px;font-size:13px">Заблокувати</a></td></tr>
+          <tr><td><div class="row" style="gap:10px"><div class="avatar a5">АП</div><div><div class="b">Андрій Петренко</div><div class="s12 muted">andrii@energycrm.ua</div></div></div></td><td><span class="chip c-blue">Користувач</span></td><td><span class="chip c-yellow">Потрібна зміна пароля</span></td><td class="num" style="text-align:right">205</td><td class="s13">Ще не входив</td><td style="text-align:right"><a class="btn line" href="#" style="padding:7px 12px;font-size:13px">Скинути пароль</a> <a class="btn line" href="#" style="padding:7px 12px;font-size:13px">Заблокувати</a></td></tr>
+          <tr><td><div class="row" style="gap:10px"><div class="avatar a1">СБ</div><div><div class="b">Софія Бондар</div><div class="s12 muted">sofiia@energycrm.ua</div></div></div></td><td><span class="chip c-blue">Користувач</span></td><td><span class="chip c-red">Заблокований</span></td><td class="num" style="text-align:right">222</td><td class="s13">12 лис, 17:40</td><td style="text-align:right"><a class="btn line" href="#" style="padding:7px 12px;font-size:13px">Розблокувати</a></td></tr>
+        </tbody></table>
+      </div>
+
+      <div class="g" style="grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);align-items:start">
+        <div class="card">
+          <div class="row" style="justify-content:space-between;margin-bottom:12px"><h3 style="margin:0">Права ролі</h3><div class="subtabs" style="background:#eef1f5"><a href="#">Адмін</a><a class="on" href="#">Користувач</a><a href="#">+ Нова роль</a></div></div>
+          <table class="tbl"><thead><tr><th>Розділ</th><th style="text-align:center">Перегляд</th><th style="text-align:center">Створення</th><th style="text-align:center">Редагування</th><th style="text-align:center">Видалення</th></tr></thead><tbody>
+            <tr><td><b>Аналітика</b></td><td style="text-align:center"><span class="cb on"></span></td><td style="text-align:center" class="muted">—</td><td style="text-align:center" class="muted">—</td><td style="text-align:center" class="muted">—</td></tr>
+            <tr><td><b>Воронки та етапи</b></td><td style="text-align:center"><span class="cb on"></span></td><td style="text-align:center"><span class="cb"></span></td><td style="text-align:center"><span class="cb"></span></td><td style="text-align:center"><span class="cb"></span></td></tr>
+            <tr><td><b>Клієнти</b></td><td style="text-align:center"><span class="cb on"></span></td><td style="text-align:center"><span class="cb on"></span></td><td style="text-align:center"><span class="cb on"></span></td><td style="text-align:center"><span class="cb"></span></td></tr>
+            <tr><td><b>Угоди</b></td><td style="text-align:center"><span class="cb on"></span></td><td style="text-align:center"><span class="cb on"></span></td><td style="text-align:center"><span class="cb on"></span></td><td style="text-align:center"><span class="cb"></span></td></tr>
+            <tr><td><b>Продукти</b></td><td style="text-align:center"><span class="cb on"></span></td><td style="text-align:center"><span class="cb"></span></td><td style="text-align:center"><span class="cb"></span></td><td style="text-align:center"><span class="cb"></span></td></tr>
+            <tr><td><b>Користувачі та ролі</b></td><td style="text-align:center"><span class="cb"></span></td><td style="text-align:center"><span class="cb"></span></td><td style="text-align:center"><span class="cb"></span></td><td style="text-align:center"><span class="cb"></span></td></tr>
+            <tr><td><b>Журнал дій</b></td><td style="text-align:center"><span class="cb"></span></td><td style="text-align:center" class="muted">—</td><td style="text-align:center" class="muted">—</td><td style="text-align:center" class="muted">—</td></tr>
+          </tbody></table>
+          <div class="sep"></div>
+          <div class="row" style="justify-content:space-between"><div><div class="b s13">Доступ до реєстру клієнтів</div><div class="s12 muted">Які клієнти та яка аналітика видимі цій ролі</div></div><div class="seg" style="background:#eef1f5"><span class="on">Лише закріплені</span><span>Усі клієнти</span></div></div>
+          <div class="row" style="justify-content:flex-end;margin-top:18px"><a class="btn line" href="#">Скасувати</a><a class="btn dark" href="#">Зберегти права</a></div>
+        </div>
+
+        <div class="card">
+          <h3>Новий користувач</h3>
+          <div class="g" style="gap:14px">
+            <div><label class="lbl">Ім’я *</label><div class="input">Максим Лисенко</div></div>
+            <div><label class="lbl">Email (логін) *</label><div class="input">maksym@energycrm.ua</div></div>
+            <div><label class="lbl">Роль *</label><div class="input">Користувач <span>▾</span></div></div>
+            <div><label class="lbl">Тимчасовий пароль</label><div class="input num"><span>Xt4-Rm9-Qw2-Lp7</span><span class="s12 b" style="color:#1a479a">Копіювати</span></div><div class="hint">Показується один раз; під час першого входу користувач має його змінити</div></div>
+            <a class="btn dark" href="#" style="width:100%">Створити користувача</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1120}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
