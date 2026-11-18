@@ -8,6 +8,8 @@ import { canAccessClient, canAccessDeal } from '@/server/access'
 import { sees_all } from '@/server/permissions'
 import { n, uah } from '@/lib/format'
 
+import { insertDeal } from '@/server/dealsCore'
+
 type R<T = {}> = ({ ok: true } & T) | { ok: false; error: string }
 
 async function me() {
@@ -60,30 +62,9 @@ export async function createDeal(_: unknown, fd: FormData): Promise<{ error?: st
     volumeMwh: String(fd.get('volumeMwh') ?? '').replace(',', '.'), amount: fd.get('amount') ? String(fd.get('amount')).replace(/\s/g, '').replace(',', '.') : undefined, note: fd.get('note') || undefined,
   })
   if (!p.success) { const f: Record<string, string> = {}; p.error.issues.forEach((i) => { f[String(i.path[0])] = i.message }); return { error: 'Перевірте поля', fields: f } }
-  const d = p.data
-  if (!(await canAccessClient(u, d.clientId))) return { error: 'Клієнта не знайдено' }
-  const [client, funnel, product] = await Promise.all([
-    db.client.findUniqueOrThrow({ where: { id: d.clientId } }),
-    db.funnel.findUnique({ where: { id: d.funnelId }, include: { stages: { orderBy: { position: 'asc' } } } }),
-    db.product.findUnique({ where: { id: d.productId } }),
-  ])
-  if (!funnel || funnel.status !== 'ACTIVE') return { error: 'Воронка недоступна', fields: { funnelId: 'Воронка недоступна' } }
-  if (!product || product.status !== 'ACTIVE') return { error: 'Архівний продукт не пропонується для нових угод', fields: { productId: 'Продукт недоступний' } }
-  const stage = (d.stageId && funnel.stages.find((s) => s.id === d.stageId && s.type === 'WORKING')) || funnel.stages.find((s) => s.type === 'WORKING')
-  if (!stage) return { error: 'У воронці немає етапів «в роботі»' }
-  const price = Number(product.price)
-  const amount = d.amount ?? Math.round((d.volumeMwh * price) / 12)
-  const ownerId = sees_all(u) ? client.managerId : u.id
-  const deal = await db.$transaction(async (tx) => {
-    const x = await tx.deal.create({
-      data: { clientId: d.clientId, funnelId: funnel.id, stageId: stage.id, productId: product.id, priceSnapshot: price, volumeMwh: d.volumeMwh, amount, ownerId, note: d.note ?? '' },
-    })
-    await tx.dealStageHistory.create({ data: { dealId: x.id, fromStage: null, toStage: stage.name, userName: u.name } })
-    await audit(u, 'Угода', 'Угода', `Угода №${String(x.number).padStart(4, '0')}`, `Створено: ${client.name} · ${product.name} · ${uah(amount)}/міс`, tx)
-    return x
-  })
-  revalidatePath('/funnels'); revalidatePath(`/clients/${d.clientId}`)
-  return { created: deal.id }
+  const r = await insertDeal(u, p.data)
+  if ('error' in r) return { error: r.error, fields: r.field ? { [r.field]: r.error } : undefined }
+  return { created: r.id }
 }
 
 export async function updateDeal(dealId: number, data: { note?: string; volumeMwh?: number; amount?: number; ownerId?: number }): Promise<R> {

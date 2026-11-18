@@ -12,25 +12,11 @@ export const IDLE_MIN = 30 // FR-1.5 автовихід після неакти�
 const REMEMBER_MIN = 60 * 12
 const MAX_FAILS = 5
 const LOCK_MIN = 15
-export const MIN_PASSWORD = 12
 
 const sha = (s: string) => createHash('sha256').update(s).digest('hex')
 export const hashPassword = (p: string) => argon2.hash(p, { type: argon2.argon2id })
 
-export function validatePassword(p: string): string | null {
-  if (p.length < MIN_PASSWORD) return `Пароль має містити щонайменше ${MIN_PASSWORD} символів`
-  if (!/[A-Za-zА-Яа-яІіЇїЄєҐґ]/.test(p) || !/\d/.test(p)) return 'Пароль має містити літери та цифри'
-  return null
-}
-
-export function tempPassword() {
-  const abc = 'ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz'
-  const dig = '23456789'
-  const pick = (set: string) => set[randomBytes(1)[0] % set.length]
-  const groups = Array.from({ length: 4 }, () => pick(abc) + pick(abc) + pick(dig))
-  return groups.join('-') // напр. Xt4-Rm9-Qw2-Lp7 (≥12 символів, літери й цифри)
-}
-
+export { validatePassword, tempPassword, MIN_PASSWORD } from './auth-policy'
 export type LoginResult = { ok: true; mustChange: boolean } | { ok: false; error: string }
 
 export async function login(email: string, password: string, remember: boolean): Promise<LoginResult> {

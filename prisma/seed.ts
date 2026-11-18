@@ -179,7 +179,7 @@ async function main() {
     cdefs.push({
       name: name + (rnd() < 0.15 ? ` №${ri(2, 9)}` : ''), type: t, city: pick(cities), status, phone,
       email: rnd() < 0.7 ? `info${i + 1}@${pick(['ukr.net', 'gmail.com', 'company.ua', 'biz.ua'])}` : null,
-      mgr: mgrPool[i], last: K(2026, rnd() < 0.85 ? 10 : 9, rnd() < 0.85 ? ri(1, 17) : ri(20, 30), ri(9, 17)),
+      mgr: mgrPool[i], last: rnd() < 0.85 ? K(2026, 10, ri(1, 17), ri(9, 17)) : K(2026, 9, ri(20, 31), ri(9, 17)),
       grp: rnd() < 0.34 ? 'A' : 'B', shares: [], source: pick(sources), power: t === 'COMPANY' ? ri(30, 400) : ri(5, 40),
     })
   }
@@ -310,7 +310,8 @@ async function main() {
     let fixedSum = 0
     days.forEach((d) => {
       const f = 0.88 + rnd() * 0.24
-      const p = isFixed(d) ? profile14 : base14.map((v) => v * f * scale14 * (d % 7 === 0 || d % 7 === 6 ? 0.82 : 1))
+      const mean14 = base14.reduce((a, b) => a + b, 0) / 24
+      const p = isFixed(d) ? profile14 : base14.map((v) => (0.45 * v + 0.55 * mean14) * f * (d % 7 === 0 || d % 7 === 6 ? 0.82 : 1))
       prof.set(d, p); if (isFixed(d)) fixedSum += p.reduce((a, b) => a + b, 0)
     })
     const otherSum = days.filter((d) => !isFixed(d)).reduce((a, d) => a + prof.get(d)!.reduce((x, y) => x + y, 0), 0)
@@ -371,7 +372,7 @@ async function main() {
   nd('ТОВ «Логістик Плюс»', 4, 'Бізнес Гарант', 150000, 2380, 'ІШ', K(2026, 10, 16, 15), { note: 'Аванс' })
   // «Втрачено»
   nd('ТОВ «Сигма»', 5, 'Бізнес Стандарт', 214000, 600, 'ІШ', K(2026, 10, 8, 12), { lost: 'Обрали іншого постачальника' })
-  nd('ФОП Лисенко Р.', 5, 'Бізнес Мініум', 22600, 58, 'АП', K(2026, 9, 29, 12), { lost: 'Не відповідає' })
+  nd('ФОП Лисенко Р.', 5, 'Бізнес Мініум', 22600, 58, 'АП', K(2026, 10, 4, 12), { lost: 'Не відповідає' })
 
   const namedCnt = (idx: number) => deals.filter((d) => d.stageIdx === idx).length
   const namedBy = (idx: number, k: string) => deals.filter((d) => d.stageIdx === idx && d.owner === k).length
@@ -401,7 +402,7 @@ async function main() {
     const amts = scaleTo(Array.from({ length: cnt }, () => 0.2 + rnd() * 1.8), sum)
     for (let j = 0; j < cnt; j++) {
       const owner = workOwners[oi++]; const c = pickClient(owner); const prod = prodForType(c)
-      const upd = K(2026, rnd() < 0.8 ? 9 : 10, rnd() < 0.8 ? ri(10, 31) : ri(1, 7), ri(9, 17)); const start = new Date(upd.getTime() - ri(5, 25) * 864e5)
+      const upd = rnd() < 0.8 ? K(2026, 9, ri(10, 31), ri(9, 17)) : K(2026, 10, ri(1, 7), ri(9, 17)); const start = new Date(upd.getTime() - ri(5, 25) * 864e5)
       deals.push({ clientId: c, funnel: F1, stageIdx: idx, product: prod, amount: amts[j], vol: Math.max(Math.round((amts[j] * 12) / P[prod].price), 1), owner, updated: upd, created: start, hist: histFor(st1, idx, MN[owner], upd, start) })
     }
   })
@@ -422,7 +423,7 @@ async function main() {
   const lostOwners = shuffle(KEYS.flatMap((k) => Array(Math.max(quota.lost[k], 0)).fill(k)))
   const lostN = 29 - namedCnt(5), lostAmts = scaleTo(Array.from({ length: lostN }, () => 0.2 + rnd() * 1.8), 1900000 - namedSum(5))
   for (let j = 0; j < lostN; j++) {
-    const owner = lostOwners[j]; const c = pickClient(owner); const prod = prodForType(c); const upd = K(2026, 9 + (rnd() < 0.5 ? 1 : 0), ri(1, 28), 12)
+    const owner = lostOwners[j]; const c = pickClient(owner); const prod = prodForType(c); const upd = K(2026, 10, ri(1, 12), 12)
     deals.push({ clientId: c, funnel: F1, stageIdx: 5, product: prod, amount: lostAmts[j], vol: Math.max(Math.round((lostAmts[j] * 12) / P[prod].price), 1), owner, updated: upd, created: new Date(upd.getTime() - 20 * 864e5), lost: pick(dicts[1][1]), hist: histFor(st1, 1, MN[owner], upd, new Date(upd.getTime() - 20 * 864e5)) })
   }
   // воронки 2 і 3: 61 та 23 угоди в роботі
