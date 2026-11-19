@@ -5,6 +5,7 @@ import { IDLE_MIN } from '@/server/auth'
 import { avCls, initials } from '@/lib/format'
 import { ScopeToggle } from './ScopeToggle'
 import { IdleGuard } from './IdleGuard'
+import { AgentPanel } from './AgentPanel'
 import { signOut } from '@/app/actions/session'
 
 export type Tab = 'analytics' | 'funnels' | 'clients' | 'products' | 'settings'
@@ -60,6 +61,7 @@ export async function Shell({ user, active, children }: { user: SessionUser; act
       </header>
       {children}
       <IdleGuard idleMin={IDLE_MIN} />
+      <AgentPanel userName={user.name} role={user.role.name} />
     </div>
   )
 }

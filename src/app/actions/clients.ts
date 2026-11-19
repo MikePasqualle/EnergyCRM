@@ -1,7 +1,6 @@
 'use server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { z } from 'zod'
 import type { Prisma } from '@/generated/prisma/client'
 import { db } from '@/lib/db'
 import { assertCan, getUser } from '@/server/auth'
@@ -21,33 +20,15 @@ async function me() {
 import type { Dup } from '@/server/dupes'
 export type ClientState = { error?: string; fields?: Record<string, string>; dups?: Dup[]; created?: number; again?: boolean; merged?: number } | undefined
 
-const clientSchema = z.object({
-  type: z.enum(['COMPANY', 'FOP', 'PERSON']),
-  name: z.string().trim().min(1, 'Вкажіть назву або ПІБ').max(200),
-  edrpou: z.string().trim().max(20).optional(),
-  contactPerson: z.string().trim().max(120).optional(),
-  phone: z.string().trim().min(1, 'Вкажіть телефон'),
-  email: z.string().trim().optional(),
-  city: z.string().trim().max(80).optional(),
-  address: z.string().trim().max(250).optional(),
-  status: z.enum(['COLD', 'WARM', 'ACTIVE']),
-  source: z.string().trim().max(80).optional(),
-  managerId: z.coerce.number().int().positive('Оберіть менеджера'),
-})
+import { clientSchema as _cs, validateClient, insertClient, updateClientCore, commSchema, insertCommunication } from '@/server/clientsCore'
+void _cs
 const opt = (v: FormDataEntryValue | null) => { const s = String(v ?? '').trim(); return s === '' ? undefined : s }
 
 function parseClient(fd: FormData) {
-  const raw = {
+  return validateClient({
     type: fd.get('type'), name: fd.get('name'), edrpou: opt(fd.get('edrpou')), contactPerson: opt(fd.get('contactPerson')), phone: fd.get('phone'), email: opt(fd.get('email')),
     city: opt(fd.get('city')), address: opt(fd.get('address')), status: fd.get('status') ?? 'COLD', source: opt(fd.get('source')), managerId: fd.get('managerId'),
-  }
-  const p = clientSchema.safeParse(raw)
-  const fields: Record<string, string> = {}
-  if (!p.success) p.error.issues.forEach((i) => { fields[String(i.path[0])] = i.message })
-  const d = p.success ? p.data : null
-  if (d && !validPhone(d.phone)) fields.phone = 'Формат: +380 XX XXX XX XX'
-  if (d?.email && !validEmail(d.email)) fields.email = 'Некоректний email'
-  return { d, fields }
+  })
 }
 
 /** FR-4.2, FR-4.3, UC-5: додавання клієнта; перед збереженням — перевірка дублікатів; опційно — одразу угода і налаштування споживача */
@@ -79,23 +60,7 @@ export async function createClient(_: ClientState, fd: FormData): Promise<Client
     if (dups.length) return { error: 'Знайдено схожого клієнта', dups, fields: dups.some((x) => x.by === 'телефоном') ? { phone: 'Такий номер уже є в реєстрі' } : { email: 'Такий email уже є в реєстрі' } }
   }
   const supplierId = Number(fd.get('supplierId')) || null
-  const client = await db.$transaction(async (tx) => {
-    const c = await tx.client.create({
-      data: { type: d.type, name: d.name, edrpou: d.edrpou ?? null, contactPerson: d.contactPerson ?? null, phone: d.phone, phoneNorm: normPhone(d.phone), email: d.email ?? null, emailNorm: normEmail(d.email),
-        city: d.city ?? null, address: d.address ?? null, source: d.source ?? null, status: d.status, managerId },
-    })
-    await tx.clientAssignment.create({ data: { clientId: c.id, toUserId: managerId, byUserId: u.id } })
-    if (group !== 'UNSET' || supplierId || gen) {
-      const s = await tx.system.create({
-        data: { clientId: c.id, name: 'Основний обʼєкт', address: d.address ?? null, group, meterType: group === 'B' ? 'Місячний (інтегральний)' : 'Почасовий (інтервальний)', hasGeneration: gen,
-          genType: gen ? String(fd.get('genType')) : null, genPowerKw: gen ? Number(fd.get('genPower')) : null, genMode: gen ? String(fd.get('genMode')) : null, updatedBy: u.name },
-      })
-      if (supplierId) await tx.supplierShare.create({ data: { systemId: s.id, supplierId, validFrom: new Date(new Date().toISOString().slice(0, 10) + 'T00:00:00Z'), sharePct: 100 } })
-      await tx.systemHistory.create({ data: { systemId: s.id, userName: u.name, summary: 'Систему створено разом із клієнтом' } })
-    }
-    await audit(u, 'Клієнт', 'Клієнт', c.name, 'Створено', tx)
-    return c
-  })
+  const client = await insertClient(u, d, { managerId, group, supplierId, gen: gen ? { type: String(fd.get('genType')), powerKw: Number(fd.get('genPower')), mode: String(fd.get('genMode')) } : null })
   if (makeDeal) {
     const r = await insertDeal(u, { clientId: client.id, funnelId: Number(fd.get('funnelId')), productId: Number(fd.get('productId')), volumeMwh: Number(String(fd.get('volumeMwh')).replace(',', '.')) })
     if ('error' in r) return { created: client.id, error: `Клієнта збережено, але угоду не створено: ${r.error}` }
@@ -135,17 +100,8 @@ export async function updateClient(clientId: number, _: ClientState, fd: FormDat
   const { d, fields } = parseClient(f2)
   if (!d) return { error: 'Перевірте поля', fields }
   if (Object.keys(fields).length) return { error: 'Перевірте поля', fields }
-  if (fd.get('force') !== '1') {
-    const dups = await findDuplicates(d.phone, d.email, clientId, u)
-    if (dups.length) return { error: 'Знайдено схожого клієнта', dups, fields: { phone: 'Такий номер/email уже є в реєстрі' } }
-  }
-  const changes: string[] = []
-  if (ex.name !== d.name) changes.push(`Назва: ${ex.name} → ${d.name}`)
-  if (ex.phone !== d.phone) changes.push(`Телефон: ${ex.phone} → ${d.phone}`)
-  if (ex.status !== d.status) changes.push(`Статус: ${ex.status} → ${d.status}`)
-  await db.client.update({ where: { id: clientId }, data: { type: d.type, name: d.name, edrpou: d.edrpou ?? null, contactPerson: d.contactPerson ?? null, phone: d.phone, phoneNorm: normPhone(d.phone), email: d.email ?? null, emailNorm: normEmail(d.email), city: d.city ?? null, address: d.address ?? null, source: d.source ?? null, status: d.status } })
-  await audit(u, 'Клієнт', 'Клієнт', d.name, changes.join('; ') || 'Дані оновлено')
-  revalidatePath(`/clients/${clientId}`); revalidatePath('/clients')
+  const r = await updateClientCore(u, clientId, d, fd.get('force') === '1')
+  if (!r.ok) return r.dups ? { error: r.error, dups: r.dups, fields: { phone: 'Такий номер/email уже є в реєстрі' } } : { error: r.error }
   return { created: clientId }
 }
 
@@ -168,18 +124,13 @@ export async function reassignClients(input: { ids?: number[]; filter?: ClientFi
   return { ok: true, count: rows.length }
 }
 
-const commSchema = z.object({ channel: z.string().min(1), summary: z.string().trim().min(1, 'Напишіть, що обговорили').max(2000) })
 export async function addCommunication(clientId: number, _: unknown, fd: FormData): Promise<{ error?: string; ok?: number }> {
   const u = await me()
   assertCan(u, 'clients', 'edit')
   if (!(await canAccessClient(u, clientId))) return { error: 'Клієнта не знайдено' }
   const p = commSchema.safeParse({ channel: fd.get('channel'), summary: fd.get('summary') })
   if (!p.success) return { error: p.error.issues[0].message }
-  await db.$transaction([
-    db.communication.create({ data: { clientId, channel: p.data.channel, summary: p.data.summary, authorId: u.id, authorName: u.name } }),
-    db.client.update({ where: { id: clientId }, data: { lastContactAt: new Date() } }),
-  ])
-  revalidatePath(`/clients/${clientId}`); revalidatePath('/dashboard')
+  await insertCommunication(u, clientId, p.data.channel, p.data.summary)
   return { ok: Date.now() }
 }
 

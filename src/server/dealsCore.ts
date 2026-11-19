@@ -1,8 +1,8 @@
 import 'server-only'
-import { revalidatePath } from 'next/cache'
+import { reval } from './revalidate'
 import { db } from '@/lib/db'
 import { audit } from './audit'
-import { canAccessClient } from './access'
+import { canAccessClient, canAccessDeal } from './access'
 import { sees_all, type SessionUser } from './permissions'
 import { uah } from '@/lib/format'
 
@@ -29,6 +29,30 @@ export async function insertDeal(u: SessionUser, d: NewDeal): Promise<{ id: numb
     await audit(u, 'Угода', 'Угода', `Угода №${String(x.number).padStart(4, '0')}`, `Створено: ${client.name} · ${product.name} · ${uah(amount)}/міс`, tx)
     return x
   })
-  revalidatePath('/funnels'); revalidatePath(`/clients/${d.clientId}`)
+  reval('/funnels', `/clients/${d.clientId}`)
   return { id: deal.id }
+}
+
+export type MoveResult = { ok: true; suggestActive?: number } | { ok: false; error: string }
+
+/** FR-3.2: переміщення картки; кожен перехід — в історію. FR-3.5: «втрачено» потребує причини. Права на «угоди → редагування» перевіряє викликач. */
+export async function moveDealCore(u: SessionUser, dealId: number, stageId: number, lostReason?: string): Promise<MoveResult> {
+  if (!(await canAccessDeal(u, dealId))) return { ok: false, error: 'Угоду не знайдено' }
+  const deal = await db.deal.findUniqueOrThrow({ where: { id: dealId }, include: { stage: true, client: true } })
+  const to = await db.stage.findUnique({ where: { id: stageId } })
+  if (!to || to.funnelId !== deal.funnelId) return { ok: false, error: 'Етап належить іншій воронці' }
+  if (to.id === deal.stageId) return { ok: true }
+  if (to.type === 'LOST' && !lostReason?.trim()) return { ok: false, error: 'Вкажіть причину втрати' }
+  const closing = to.type !== 'WORKING'
+  await db.$transaction(async (tx) => {
+    await tx.deal.update({
+      where: { id: dealId },
+      data: { stageId: to.id, updatedAt: new Date(), closedAt: closing ? new Date() : null, lostReason: to.type === 'LOST' ? lostReason!.trim() : null },
+    })
+    await tx.dealStageHistory.create({ data: { dealId, fromStage: deal.stage.name, toStage: to.name, userName: u.name } })
+    await audit(u, 'Етап угоди', 'Угода', `Угода №${String(deal.number).padStart(4, '0')}`, `${deal.stage.name} → ${to.name}`, tx)
+  })
+  reval('/funnels', `/deals/${dealId}`, '/dashboard')
+  // FR-4.8: після «виграно» пропонуємо статус «Дійсний»
+  return { ok: true, suggestActive: to.type === 'WON' && deal.client.status !== 'ACTIVE' ? deal.clientId : undefined }
 }
