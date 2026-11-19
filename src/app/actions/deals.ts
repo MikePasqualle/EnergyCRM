@@ -8,7 +8,7 @@ import { canAccessClient, canAccessDeal } from '@/server/access'
 import { sees_all } from '@/server/permissions'
 import { n, uah } from '@/lib/format'
 
-import { insertDeal } from '@/server/dealsCore'
+import { insertDeal, moveDealCore } from '@/server/dealsCore'
 
 type R<T = {}> = ({ ok: true } & T) | { ok: false; error: string }
 
@@ -23,24 +23,7 @@ const fail = (error: string): { ok: false; error: string } => ({ ok: false, erro
 export async function moveDeal(dealId: number, stageId: number, lostReason?: string): Promise<R<{ suggestActive?: number }>> {
   const u = await me()
   assertCan(u, 'deals', 'edit')
-  if (!(await canAccessDeal(u, dealId))) return fail('Угоду не знайдено')
-  const deal = await db.deal.findUniqueOrThrow({ where: { id: dealId }, include: { stage: true, client: true } })
-  const to = await db.stage.findUnique({ where: { id: stageId } })
-  if (!to || to.funnelId !== deal.funnelId) return fail('Етап належить іншій воронці')
-  if (to.id === deal.stageId) return { ok: true }
-  if (to.type === 'LOST' && !lostReason?.trim()) return fail('Вкажіть причину втрати')
-  const closing = to.type !== 'WORKING'
-  await db.$transaction(async (tx) => {
-    await tx.deal.update({
-      where: { id: dealId },
-      data: { stageId: to.id, updatedAt: new Date(), closedAt: closing ? new Date() : null, lostReason: to.type === 'LOST' ? lostReason!.trim() : null },
-    })
-    await tx.dealStageHistory.create({ data: { dealId, fromStage: deal.stage.name, toStage: to.name, userName: u.name } })
-    await audit(u, 'Етап угоди', 'Угода', `Угода №${String(deal.number).padStart(4, '0')}`, `${deal.stage.name} → ${to.name}`, tx)
-  })
-  revalidatePath('/funnels'); revalidatePath(`/deals/${dealId}`); revalidatePath('/dashboard')
-  // FR-4.8: після «виграно» пропонуємо статус «Дійсний»
-  return { ok: true, suggestActive: to.type === 'WON' && deal.client.status !== 'ACTIVE' ? deal.clientId : undefined }
+  return moveDealCore(u, dealId, stageId, lostReason)
 }
 
 const dealSchema = z.object({

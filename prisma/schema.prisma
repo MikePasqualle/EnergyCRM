@@ -335,3 +335,40 @@ model AuditLog {
   details  String   @default("")
   @@index([at])
 }
+
+/// Розмова з AI-агентом (веб-панель або Telegram)
+model AgentThread {
+  id        Int            @id @default(autoincrement())
+  userId    Int
+  channel   String         // web | telegram
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @default(now())
+  messages  AgentMessage[]
+  actions   AgentAction[]
+  @@index([userId, channel, updatedAt])
+}
+
+/// Повідомлення в форматі Claude API (content зберігається як є — для коректного повтору)
+model AgentMessage {
+  id       Int         @id @default(autoincrement())
+  threadId Int
+  thread   AgentThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  role     String      // user | assistant
+  content  Json
+  at       DateTime    @default(now())
+  @@index([threadId, id])
+}
+
+/// Запропонована агентом зміна даних, що чекає на підтвердження користувача
+model AgentAction {
+  id        String      @id
+  threadId  Int
+  thread    AgentThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+  userId    Int
+  tool      String
+  input     Json
+  card      Json
+  status    String      @default("PENDING") // PENDING | DONE | CANCELLED | FAILED
+  createdAt DateTime    @default(now())
+  @@index([threadId, status])
+}
