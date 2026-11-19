@@ -9,7 +9,7 @@ export async function GET(req: Request) {
   const u = await agentUser(req, false)
   if (!u) return json({ error: 'Потрібен вхід' }, 401)
   const threadId = await getActiveThread(u.id, 'web')
-  return json({ ready: hasClaudeKey(), ...(await loadHistory(threadId, u.id)) })
+  return json({ ready: await hasClaudeKey(), ...(await loadHistory(threadId, u.id)) })
 }
 
 /** Нова розмова */

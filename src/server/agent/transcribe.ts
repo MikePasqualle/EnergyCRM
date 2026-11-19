@@ -1,9 +1,10 @@
 import 'server-only'
+import { getSecret } from './config'
 
 /** Розпізнавання мовлення. В Anthropic власного рішення немає, тому використовується OpenAI (ключ OPENAI_API_KEY). Модель — TRANSCRIBE_MODEL. */
 export async function transcribe(audio: Buffer, filename = 'voice.ogg'): Promise<string> {
-  const key = process.env.OPENAI_API_KEY
-  if (!key) throw new Error('Не задано OPENAI_API_KEY для розпізнавання голосу')
+  const key = (await getSecret('openai')).value
+  if (!key) throw new Error('Не задано ключ розпізнавання голосу')
   const fd = new FormData()
   fd.append('file', new Blob([new Uint8Array(audio)]), filename)
   fd.append('model', process.env.TRANSCRIBE_MODEL || 'gpt-4o-transcribe')

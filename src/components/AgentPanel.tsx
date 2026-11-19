@@ -118,7 +118,7 @@ export function AgentPanel({ userName, role }: { userName: string; role: string 
         : <div className="ag-note act">Режим «Дії»: агент може створювати й змінювати записи, але кожну зміну виконує лише після вашого підтвердження.</div>}
 
       <div className="ag-feed" ref={feed} aria-live="polite">
-        {!ready && <div className="alert warn">Агент не налаштований: на сервері не задано ключ Claude API (ANTHROPIC_API_KEY).</div>}
+        {!ready && <div className="alert warn">Агент не налаштований: не задано ключ Claude API. Адміністратор додає його в Налаштування → AI-агент і Telegram.</div>}
         {loaded && !msgs.length && (
           <div>
             <div className="ag-bubble"><p><b>Привіт, {userName.split(' ')[0]}.</b> Запитайте про клієнтів, угоди чи аналітику — або доручіть зміну в режимі «Дії».</p></div>

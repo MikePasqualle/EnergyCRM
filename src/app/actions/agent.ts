@@ -3,7 +3,7 @@ import { revalidatePath } from 'next/cache'
 import { db } from '@/lib/db'
 import { assertCan, getUser } from '@/server/auth'
 import { audit } from '@/server/audit'
-import { MODELS, clearTelegram, getAgentConfig, saveModel, saveTelegram, type Effort } from '@/server/agent/config'
+import { MODELS, clearSecret, clearTelegram, getAgentConfig, saveModel, saveSecret, saveTelegram, type Effort, type SecretName } from '@/server/agent/config'
 import { sendTest, startTelegram, stopTelegram, verifyToken } from '@/server/agent/telegram'
 
 async function admin() {
@@ -61,4 +61,23 @@ export async function disconnectTelegram(): Promise<AgentFormState> {
   await audit(u, 'Налаштування', 'AI-агент', 'Telegram-бот', 'Відключено, токен видалено')
   revalidatePath('/settings/agent')
   return { ok: 'Бота відключено, токен видалено' }
+}
+
+/** Ключі API з інтерфейсу: зберігаються в БД зашифрованими (APP_SECRET), назад не показуються. */
+export async function saveSecretKey(name: SecretName, value: string): Promise<AgentFormState> {
+  const u = await admin()
+  const v = value.trim()
+  if (name !== 'anthropic' && name !== 'openai') return { error: 'Невідомий ключ' }
+  if (v.length < 20 || /\s/.test(v)) return { error: 'Ключ має бути одним рядком без пробілів' }
+  await saveSecret(name, v)
+  await audit(u, 'Налаштування', 'AI-агент', name === 'anthropic' ? 'Ключ Claude API' : 'Ключ розпізнавання голосу', 'Збережено')
+  revalidatePath('/settings/agent')
+  return { ok: 'Ключ збережено' }
+}
+export async function removeSecretKey(name: SecretName): Promise<AgentFormState> {
+  const u = await admin()
+  await clearSecret(name)
+  await audit(u, 'Налаштування', 'AI-агент', name === 'anthropic' ? 'Ключ Claude API' : 'Ключ розпізнавання голосу', 'Видалено з налаштувань')
+  revalidatePath('/settings/agent')
+  return { ok: 'Ключ видалено з налаштувань' }
 }

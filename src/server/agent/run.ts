@@ -3,7 +3,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import { db } from '@/lib/db'
 import type { Prisma } from '@/generated/prisma/client'
 import type { SessionUser } from '@/server/permissions'
-import { getAgentConfig, hasClaudeKey } from './config'
+import { getAgentConfig, getSecret } from './config'
 import { SYSTEM, ctxPrefix, stripCtx } from './prompt'
 import { STEP_LABELS, TOOLS, runTool, type Card, type Mode } from './tools'
 
@@ -18,9 +18,9 @@ const MAX_STEPS = 10
 const MAX_THREAD_ROWS = 120
 type Msg = Anthropic.Beta.BetaMessageParam
 
-const g = globalThis as unknown as { __agentBusy?: Set<number>; __agentRate?: Map<number, number[]>; __agentClient?: Anthropic }
+const g = globalThis as unknown as { __agentBusy?: Set<number>; __agentRate?: Map<number, number[]>; __agentClient?: { key: string; c: Anthropic } }
 const busy = () => (g.__agentBusy ??= new Set())
-const client = () => (g.__agentClient ??= new Anthropic())
+const client = (key: string) => { if (g.__agentClient?.key !== key) g.__agentClient = { key, c: new Anthropic({ apiKey: key }) }; return g.__agentClient.c }
 
 /** Не більше 20 запитів на хвилину на користувача. */
 function rateLimited(userId: number) {
@@ -51,7 +51,8 @@ async function save(threadId: number, role: 'user' | 'assistant', content: unkno
 
 export async function runAgent(p: { threadId: number; user: SessionUser; mode: Mode; text: string; channel: 'web' | 'telegram'; voice?: boolean; emit: (e: AgentEvent) => void }) {
   const { threadId, user, mode, emit } = p
-  if (!hasClaudeKey()) { emit({ type: 'error', message: 'Агент не налаштований: на сервері не задано ANTHROPIC_API_KEY.' }); return }
+  const apiKey = (await getSecret('anthropic')).value
+  if (!apiKey) { emit({ type: 'error', message: 'Агент не налаштований: додайте ключ Claude API в Налаштування → AI-агент і Telegram.' }); return }
   if (rateLimited(user.id)) { emit({ type: 'error', message: 'Забагато запитів. Зачекайте хвилину.' }); return }
   if (busy().has(threadId)) { emit({ type: 'error', message: 'Попередній запит ще виконується.' }); return }
   busy().add(threadId)
@@ -69,10 +70,12 @@ export async function runAgent(p: { threadId: number; user: SessionUser; mode: M
     for (let step = 0; step < MAX_STEPS; step++) {
       const params = {
         model: cfg.model, max_tokens: 16000, system: SYSTEM, tools: TOOLS as unknown as Anthropic.Beta.BetaTool[],
-        output_config: { effort: cfg.effort }, betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default',
-      } as const
+        output_config: { effort: cfg.effort },
+        // серверний fallback при відмові моделі недоступний для Haiku 5.5
+        ...(cfg.model === 'claude-haiku-5-5' ? {} : { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' }),
+      }
       const call = async (msgs: Msg[]) => {
-        const stream = client().beta.messages.stream({ ...params, messages: msgs } as never)
+        const stream = client(apiKey).beta.messages.stream({ ...params, messages: msgs } as never)
         stream.on('text', (d: string) => { if (needSep) { emit({ type: 'text', delta: '\n\n' }); needSep = false } emit({ type: 'text', delta: d }) })
         return (await stream.finalMessage()) as Anthropic.Beta.BetaMessage
       }
@@ -105,7 +108,7 @@ export async function runAgent(p: { threadId: number; user: SessionUser; mode: M
     emit({ type: 'done', threadId })
   } catch (e) {
     console.error('[agent] помилка запиту', e)
-    const m = e instanceof Anthropic.AuthenticationError ? 'Ключ Claude API недійсний. Перевірте ANTHROPIC_API_KEY.'
+    const m = e instanceof Anthropic.AuthenticationError ? 'Ключ Claude API недійсний. Перевірте ключ у налаштуваннях.'
       : e instanceof Anthropic.RateLimitError ? 'Claude API: перевищено ліміт запитів. Спробуйте за хвилину.'
       : e instanceof Anthropic.APIError ? `Помилка Claude API (${e.status ?? 'мережа'}). Спробуйте ще раз.` : 'Не вдалося отримати відповідь агента.'
     emit({ type: 'error', message: m })
