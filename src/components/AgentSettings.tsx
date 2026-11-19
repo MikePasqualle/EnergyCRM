@@ -1,7 +1,7 @@
 'use client'
 import { useActionState, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import { disconnectTelegram, saveAgentModel, saveTelegramSettings, testTelegram, type AgentFormState } from '@/app/actions/agent'
+import { disconnectTelegram, removeSecretKey, saveAgentModel, saveSecretKey, saveTelegramSettings, testTelegram, type AgentFormState } from '@/app/actions/agent'
 
 const note = (s: AgentFormState) => (s?.error ? <div className="alert bad" role="alert" style={{ marginTop: 12 }}>{s.error}</div> : s?.ok ? <div className="alert ok" role="status" style={{ marginTop: 12 }}>{s.ok}</div> : null)
 
@@ -52,5 +52,26 @@ export function TelegramForm({ tokenSet, chatId, userId, enabled, users }: { tok
       </div>
       {note(state ?? res)}
     </form>
+  )
+}
+
+export function SecretForm({ name, label, placeholder, source }: { name: 'anthropic' | 'openai'; label: string; placeholder: string; source: 'settings' | 'env' | null }) {
+  const [v, setV] = useState('')
+  const [res, setRes] = useState<AgentFormState>()
+  const [p, start] = useTransition()
+  const r = useRouter()
+  const id = `sec-${name}`
+  return (
+    <div>
+      <label className="lbl" htmlFor={id}>{label}</label>
+      <div className="row" style={{ flexWrap: 'wrap' }}>
+        <input id={id} className="input" type="password" autoComplete="off" spellCheck={false} value={v} onChange={(e) => setV(e.target.value)} style={{ flex: '1 1 260px', width: 'auto' }}
+          placeholder={source === 'settings' ? 'Збережено — введіть новий, щоб замінити' : source === 'env' ? 'Задано на сервері — введіть, щоб перекрити' : placeholder} />
+        <button type="button" className="btn dark" disabled={p || !v.trim()} onClick={() => start(async () => { const x = await saveSecretKey(name, v); setRes(x); if (x?.ok) { setV(''); r.refresh() } })}>Зберегти</button>
+        {source === 'settings' && <button type="button" className="btn danger" disabled={p} onClick={() => { if (confirm('Видалити збережений ключ?')) start(async () => { setRes(await removeSecretKey(name)); r.refresh() }) }}>Видалити</button>}
+      </div>
+      <div className="hint">{source === 'settings' ? 'Ключ збережено зашифрованим і не показується' : source === 'env' ? 'Зараз використовується ключ зі змінної середовища сервера' : 'Ключ ще не додано'}</div>
+      {note(res)}
+    </div>
   )
 }

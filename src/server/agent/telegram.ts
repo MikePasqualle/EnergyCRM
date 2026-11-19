@@ -118,7 +118,7 @@ async function handle(u: TgUpdate) {
 
   const v = m.voice ?? m.audio ?? m.video_note
   if (v) {
-    if (!hasVoiceKey()) { await say(token, chatId, 'Голосові поки не підтримуються: на сервері не задано OPENAI_API_KEY для розпізнавання. Напишіть текстом.'); return }
+    if (!(await hasVoiceKey())) { await say(token, chatId, 'Голосові поки не підтримуються: не задано ключ розпізнавання (Налаштування → AI-агент). Напишіть текстом.'); return }
     if (v.duration > 300 || (v.file_size ?? 0) > 20 * 1024 * 1024) { await say(token, chatId, 'Голосове задовге (максимум 5 хвилин). Надішліть коротше.'); return }
     try {
       const f = await api<{ file_path: string }>(token, 'getFile', { file_id: v.file_id })
